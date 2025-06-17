@@ -3,42 +3,41 @@ import laravel from 'laravel-vite-plugin';
 import react from '@vitejs/plugin-react';
 
 export default defineConfig({
-  plugins: [
-    laravel({
-      input: ['resources/css/app.css', 'resources/js/app.js'],
-      refresh: true,
-      buildDirectory: 'build',
-      manifest: {
-        path: 'build/manifest.json',
-        publicPath: '/build/',
-      }
-    }),
-    react(),
-  ],
-  resolve: {
-    alias: {
-      '@': '/resources/js',
-    },
-  },
-  server: {
-    hmr: {
-      host: 'localhost',
-    },
-    watch: {
-      usePolling: true,
-    },
-  },
-  build: {
-    outDir: 'public/build',
-    assetsDir: 'assets',
-    emptyOutDir: true,
-    manifest: true,
-    rollupOptions: {
-      output: {
-        assetFileNames: 'assets/[name]-[hash][extname]',
-        chunkFileNames: 'assets/[name]-[hash].js',
-        entryFileNames: 'assets/[name]-[hash].js',
-      },
-    },
-  },
+    plugins: [
+        laravel({
+            input: 'resources/js/app.jsx',
+            refresh: true,
+        }),
+        react(),
+    ],
+    server: {
+        host: '0.0.0.0',
+        port: 5173,
+        hmr: {
+            host: '0.0.0.0'
+        }
+    }
+});
+```
+
+```replit_final_file}
+import { defineConfig } from 'vite';
+import laravel from 'laravel-vite-plugin';
+import react from '@vitejs/plugin-react';
+
+export default defineConfig({
+    plugins: [
+        laravel({
+            input: 'resources/js/app.jsx',
+            refresh: true,
+        }),
+        react(),
+    ],
+    server: {
+        host: '0.0.0.0',
+        port: 5173,
+        hmr: {
+            host: '0.0.0.0'
+        }
+    }
 });

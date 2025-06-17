@@ -1,4 +1,5 @@
-import { Link } from '@inertiajs/react';
+import { Link, Head } from '@inertiajs/react';
+import React from 'react';
 import Layout from '../components/Layout';
 
 export default function Welcome() {

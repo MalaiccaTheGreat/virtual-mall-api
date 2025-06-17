@@ -1,21 +1,11 @@
-import { lazy } from 'react';
 
-const pages = {
-    Welcome: () => import('./Pages/Welcome'),
-    Home: () => import('./Pages/Home'),
-    Cart: () => import('./Pages/Cart'),
-    ProductDetail: () => import('./Pages/ProductDetail'),
-    Search: () => import('./Pages/Search'),
-    Checkout: () => import('./Pages/Checkout'),
-    VirtualAssistant: () => import('./Pages/VirtualAssistant'),
-    Login: () => import('./Pages/Auth/Login'),
-    Register: () => import('./Pages/Auth/Register'),
-};
-
-export function resolvePageComponent(name, props) {
-    const page = pages[name];
+export const resolvePageComponent = (name) => {
+    const pages = import.meta.glob('./Pages/**/*.jsx', { eager: true });
+    const page = pages[`./Pages/${name}.jsx`];
+    
     if (!page) {
-        throw new Error(`Page component ${name} not found`);
+        throw new Error(`Page ${name} not found`);
     }
-    return page(props);
-}
+    
+    return page.default;
+};
