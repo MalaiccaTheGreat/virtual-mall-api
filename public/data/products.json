@@ -1,0 +1,38 @@
+[
+  {
+    "id": 1,
+    "name": "Classic Blue Jeans",
+    "price": 59.99,
+    "image": "jeans.jpg",
+    "description": "Comfortable and durable blue jeans with a classic fit",
+    "category": "Apparel",
+    "subcategory": "Bottoms",
+    "stock": 50,
+    "rating": 4.5,
+    "reviews": 120
+  },
+  {
+    "id": 2,
+    "name": "Gold Standard T-Shirt",
+    "price": 29.99,
+    "image": "tshirt.jpg",
+    "description": "Premium cotton t-shirt with gold accents",
+    "category": "Apparel",
+    "subcategory": "Tops",
+    "stock": 100,
+    "rating": 4.7,
+    "reviews": 85
+  },
+  {
+    "id": 3,
+    "name": "Royal Blue Hoodie",
+    "price": 79.99,
+    "image": "hoodie.jpg",
+    "description": "Warm and stylish hoodie with royal blue color",
+    "category": "Apparel",
+    "subcategory": "Outerwear",
+    "stock": 75,
+    "rating": 4.6,
+    "reviews": 92
+  }
+]
