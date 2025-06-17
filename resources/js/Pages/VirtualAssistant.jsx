@@ -77,11 +77,27 @@ export default function VirtualAssistant() {
         <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
           <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
             <div className="p-6">
-              <h1 className="text-2xl font-bold mb-6">Virtual Shopping Assistant</h1>
+              <div className="flex items-center space-x-4 mb-6">
+                <img 
+                  src="/assets/virtual-assistant.webp" 
+                  alt="Pulse & Threads Assistant" 
+                  className="w-16 h-16 rounded-full animate-pulse"
+                />
+                <div>
+                  <h1 className="text-3xl font-bold" style={{ color: '#1e3a8a' }}>
+                    Pulse & Threads Assistant
+                  </h1>
+                  <p style={{ color: '#FFD700' }} className="text-lg font-medium">
+                    Your Personal Shopping Companion
+                  </p>
+                </div>
+              </div>
               
-              <div className="mb-8">
-                <p className="text-gray-600">
-                  I'm here to help you with your shopping! You can ask me questions about products, make recommendations, or assist with your purchase.
+              <div className="mb-8 p-4 rounded-lg border-l-4" style={{ backgroundColor: '#f0f7ff', borderLeftColor: '#FFD700' }}>
+                <p style={{ color: '#1e3a8a' }}>
+                  Welcome to Pulse & Threads Virtual Mall! I'm here to help you discover amazing fashion, 
+                  provide styling advice, help with virtual try-ons, and assist with your shopping journey. 
+                  Feel free to ask me anything!
                 </p>
               </div>
 
@@ -97,9 +113,10 @@ export default function VirtualAssistant() {
                       <div
                         className={`max-w-[80%] rounded-lg p-3 ${
                           message.isUser
-                            ? 'bg-indigo-600 text-white'
-                            : 'bg-gray-100 text-gray-900'
+                            ? 'text-white'
+                            : 'bg-gray-100'
                         }`}
+                        style={message.isUser ? { backgroundColor: '#1e3a8a' } : { color: '#1e3a8a' }}
                       >
                         <p className="mb-1">{message.text}</p>
                         <small className="text-xs opacity-70">
@@ -124,7 +141,8 @@ export default function VirtualAssistant() {
                 <Button
                   type="submit"
                   disabled={loading}
-                  className="bg-indigo-600 hover:bg-indigo-700 text-white"
+                  className="transition-colors hover:bg-yellow-400"
+                  style={{ backgroundColor: '#FFD700', color: '#1e3a8a' }}
                 >
                   {loading ? 'Thinking...' : 'Send'}
                 </Button>

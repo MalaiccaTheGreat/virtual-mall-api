@@ -30,6 +30,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 // Virtual Try-On API Routes
 Route::prefix('try-on')->group(function () {
     Route::post('/session', [App\Http\Controllers\VirtualTryOnController::class, 'createSession']);
+    Route::get('/session/{id}', [App\Http\Controllers\VirtualTryOnController::class, 'getSession']);
     Route::post('/add-item', [App\Http\Controllers\VirtualTryOnController::class, 'addItem']);
     Route::delete('/remove-item', [App\Http\Controllers\VirtualTryOnController::class, 'removeItem']);
     Route::post('/add-to-cart', [App\Http\Controllers\VirtualTryOnController::class, 'addAllToCart']);

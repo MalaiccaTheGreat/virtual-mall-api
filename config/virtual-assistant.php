@@ -10,10 +10,10 @@ return [
     |
     */
 
-    'name' => env('VIRTUAL_ASSISTANT_NAME', 'Virtual Mall Assistant'),
+    'name' => env('VIRTUAL_ASSISTANT_NAME', 'Pulse & Threads Assistant'),
     
     'brand_colors' => [
-        'primary' => env('VIRTUAL_ASSISTANT_BRAND_COLOR_PRIMARY', '#002366'),
+        'primary' => env('VIRTUAL_ASSISTANT_BRAND_COLOR_PRIMARY', '#1e3a8a'),
         'secondary' => env('VIRTUAL_ASSISTANT_BRAND_COLOR_SECONDARY', '#FFD700'),
     ],
 

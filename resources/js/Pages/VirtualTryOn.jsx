@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { Head, Link } from '@inertiajs/react';
 import Button from '../components/Button';
@@ -33,7 +32,7 @@ export default function VirtualTryOn({ products }) {
     const formData = new FormData();
     formData.append('model_type', modelType);
     formData.append('body_measurements', JSON.stringify(bodyMeasurements));
-    
+
     if (userPhoto) {
       formData.append('user_photo', userPhoto);
     }
@@ -159,16 +158,32 @@ export default function VirtualTryOn({ products }) {
 
   return (
     <Layout>
-      <Head title="Virtual Try-On" />
-      
-      <div className="py-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-8">Virtual Try-On Studio</h1>
-          
+      <Head title="Virtual Try-On - Pulse & Threads Virtual Mall" />
+
+      <div className="py-12">
+        <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
+          <div className="bg-white overflow-hidden shadow-lg sm:rounded-lg border-t-4" style={{ borderTopColor: '#FFD700' }}>
+            <div className="p-6">
+              <div className="flex items-center space-x-4 mb-6">
+                <img 
+                  src="/assets/Logo.jpeg" 
+                  alt="Pulse & Threads Logo" 
+                  className="w-12 h-12 rounded-full object-cover"
+                />
+                <div>
+                  <h1 className="text-3xl font-bold" style={{ color: '#1e3a8a' }}>
+                    Virtual Try-On Experience
+                  </h1>
+                  <p style={{ color: '#FFD700' }} className="text-lg">
+                    Try before you buy with Pulse & Threads
+                  </p>
+                </div>
+              </div>
+
           {/* Model Selection */}
           <div className="bg-white rounded-lg shadow p-6 mb-8">
             <h2 className="text-xl font-semibold mb-4">Choose Your Model</h2>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-4">
                 <div className="flex items-center space-x-4">
@@ -183,7 +198,7 @@ export default function VirtualTryOn({ products }) {
                   />
                   <label htmlFor="3d_model" className="text-lg">3D Avatar Model</label>
                 </div>
-                
+
                 <div className="flex items-center space-x-4">
                   <input
                     type="radio"
@@ -361,7 +376,7 @@ export default function VirtualTryOn({ products }) {
             <div className="space-y-6">
               {Object.entries(clothingCategories).map(([category, displayName]) => {
                 const categoryProducts = getProductsByCategory(category);
-                
+
                 if (categoryProducts.length === 0) return null;
 
                 return (
@@ -379,7 +394,7 @@ export default function VirtualTryOn({ products }) {
                             <div className="flex-1">
                               <h4 className="font-medium text-sm">{product.name}</h4>
                               <p className="text-green-600 font-semibold">${product.price}</p>
-                              
+
                               {/* Size Selection */}
                               {product.available_sizes && product.available_sizes.length > 0 && (
                                 <select className="mt-2 text-xs border rounded px-2 py-1">
@@ -389,7 +404,7 @@ export default function VirtualTryOn({ products }) {
                                   ))}
                                 </select>
                               )}
-                              
+
                               <button
                                 onClick={() => addItemToTryOn(product, category)}
                                 disabled={!currentSession}
