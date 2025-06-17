@@ -14,6 +14,9 @@ export default function Layout({ children }) {
             </div>
             
             <div className="hidden sm:flex sm:items-center sm:ml-6">
+              <Link href="/virtual-try-on" className="ml-4 px-3 py-2 text-sm text-gray-700 hover:text-gray-900">
+                Virtual Try-On
+              </Link>
               <Link href="/cart" className="ml-4 px-3 py-2 text-sm text-gray-700 hover:text-gray-900">
                 Cart
               </Link>

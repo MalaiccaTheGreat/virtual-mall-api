@@ -25,11 +25,19 @@ class Product extends Model implements HasMedia
         'price',
         'image_path',
         'description',
-        'category'
+        'category',
+        'clothing_category',
+        'available_sizes',
+        'color_variants',
+        'try_on_model_path',
+        'is_try_on_enabled'
     ];
 
     protected $casts = [
-        'price' => 'decimal:2'
+        'price' => 'decimal:2',
+        'available_sizes' => 'array',
+        'color_variants' => 'array',
+        'is_try_on_enabled' => 'boolean'
     ];
     /**
      * The attributes that should be cast.

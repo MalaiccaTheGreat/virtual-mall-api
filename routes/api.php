@@ -22,3 +22,16 @@ Route::post('/products/{product}/add-to-cart', [ProductController::class, 'addTo
 
 // Virtual Assistant Route
 Route::post('/chat', [App\Http\Controllers\VirtualAssistantController::class, 'handleMessage']);
+
+Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+    return $request->user();
+});
+
+// Virtual Try-On API Routes
+Route::prefix('try-on')->group(function () {
+    Route::post('/session', [App\Http\Controllers\VirtualTryOnController::class, 'createSession']);
+    Route::post('/add-item', [App\Http\Controllers\VirtualTryOnController::class, 'addItem']);
+    Route::delete('/remove-item', [App\Http\Controllers\VirtualTryOnController::class, 'removeItem']);
+    Route::post('/add-to-cart', [App\Http\Controllers\VirtualTryOnController::class, 'addAllToCart']);
+    Route::get('/session/{id}', [App\Http\Controllers\VirtualTryOnController::class, 'getSession']);
+});

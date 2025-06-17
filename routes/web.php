@@ -5,6 +5,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\VirtualAssistantController;
+use App\Http\Controllers\VirtualTryOnController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -47,6 +48,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/api/cart/remove/{id}', [CartController::class, 'remove'])->where('id', '[0-9]+');
     Route::delete('/api/cart/clear', [CartController::class, 'clear']);
     Route::patch('/api/cart/quantity/{id}', [CartController::class, 'updateQuantity'])->where('id', '[0-9]+');
+
+    Route::get('/virtual-try-on', [VirtualTryOnController::class, 'index'])->name('virtual-try-on');
 });
 
 // Public product view
