@@ -33,22 +33,23 @@ class Product extends Model implements HasMedia
         'is_try_on_enabled'
     ];
 
-    protected $casts = [
-        'price' => 'decimal:2',
-        'available_sizes' => 'array',
-        'color_variants' => 'array',
-        'is_try_on_enabled' => 'boolean'
-    ];
     /**
-     * The attributes that should be cast.
+     * The attributes that should be cast to native types.
      *
      * @var array<string, string>
      */
     protected $casts = [
+        'price' => 'decimal:2',
         'price_kwacha' => 'float',
-        'price_usd' => 'float'
+        'price_usd' => 'float',
+        'available_sizes' => 'array',
+        'color_variants' => 'array',
+        'is_try_on_enabled' => 'boolean'
     ];
 
+    /**
+     * Accessor for price formatting.
+     */
     public function getPriceAttribute($value)
     {
         return number_format($value, 2);
@@ -67,7 +68,7 @@ class Product extends Model implements HasMedia
      */
     public function shouldBeSearchable(): bool
     {
-        return $this->stock_quantity > 0; // Only index in-stock products
+        return $this->stock_quantity > 0;
     }
 
     /**
@@ -95,8 +96,8 @@ class Product extends Model implements HasMedia
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('products')
-             ->useDisk('s3') // Or 'public' for local storage
-             ->singleFile(); // For primary product image
+             ->useDisk('s3')
+             ->singleFile();
 
         $this->addMediaCollection('product_gallery')
              ->useDisk('s3');
@@ -134,7 +135,7 @@ class Product extends Model implements HasMedia
     }
 
     /**
-     * Price accessor with currency formatting.
+     * Laravel 9+ Attribute-style accessor (optional, not needed if using getPriceAttribute).
      */
     protected function price(): Attribute
     {
