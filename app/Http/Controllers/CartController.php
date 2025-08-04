@@ -134,4 +134,44 @@ class CartController extends Controller
 
         return response()->json($cart->load('items'));
     }
+
+    public function addMultiple(Request $request): JsonResponse
+    {
+        $request->validate([
+            'items' => 'required|array',
+            'items.*.id' => 'required|exists:products,id',
+            'items.*.quantity' => 'required|integer|min:1',
+        ]);
+
+        $cart = $request->user()->cart;
+
+        if (!$cart) {
+            $cart = Cart::create(['user_id' => $request->user()->id]);
+        }
+
+        foreach ($request->items as $item) {
+            $existingItem = $cart->items()
+                ->where('product_id', $item['id'])
+                ->first();
+
+            if ($existingItem) {
+                $existingItem->update([
+                    'quantity' => $existingItem->quantity + $item['quantity'],
+                ]);
+            } else {
+                $cart->items()->create([
+                    'product_id' => $item['id'],
+                    'quantity' => $item['quantity'],
+                    'name' => $item['name'],
+                    'price' => $item['price'],
+                ]);
+            }
+        }
+
+        return response()->json([
+            'success' => true,
+            'items_added' => count($request->items),
+            'cart' => $cart->load('items')
+        ]);
+    }
 }

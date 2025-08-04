@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { Link, usePage } from '@inertiajs/react';
+import CurrencySwitcher from '@/components/CurrencySwitcher';
 
 export default function Layout({ children, title }) {
     const { auth } = usePage().props;
@@ -32,8 +33,9 @@ export default function Layout({ children, title }) {
                             </div>
                         </div>
                         <div className="hidden sm:ml-6 sm:flex sm:items-center">
+                            <CurrencySwitcher />
                             {auth.user ? (
-                                <div className="flex items-center space-x-4">
+                                <div className="ml-4 flex items-center space-x-4">
                                     <span className="text-gray-700">Hello, {auth.user.name}</span>
                                     <Link
                                         href="/logout"
@@ -45,7 +47,7 @@ export default function Layout({ children, title }) {
                                     </Link>
                                 </div>
                             ) : (
-                                <div className="flex items-center space-x-4">
+                                <div className="ml-4 flex items-center space-x-4">
                                     <Link href="/login" className="text-gray-500 hover:text-gray-700">
                                         Login
                                     </Link>

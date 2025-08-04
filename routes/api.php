@@ -23,6 +23,8 @@ Route::post('/products/{product}/add-to-cart', [ProductController::class, 'addTo
 // Virtual Assistant Route
 Route::post('/chat', [App\Http\Controllers\VirtualAssistantController::class, 'handleMessage']);
 
+Route::post('/cart/add-multiple', [App\Http\Controllers\CartController::class, 'addMultiple']);
+
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
