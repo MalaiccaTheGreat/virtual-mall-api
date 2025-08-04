@@ -29,8 +29,14 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth');
 Route::get('/api/user', [AuthController::class, 'user'])->middleware('auth');
 
 // Protected Routes
+use App\Http\Controllers\Admin\StoreController;
+
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', fn () => view('app'))->name('dashboard'); // Let React route internally
+
+    Route::prefix('admin')->name('admin.')->group(function () {
+        Route::resource('stores', StoreController::class);
+    });
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

@@ -30,8 +30,14 @@ class Product extends Model implements HasMedia
         'available_sizes',
         'color_variants',
         'try_on_model_path',
-        'is_try_on_enabled'
+        'is_try_on_enabled',
+        'store_id',
     ];
+
+    public function store()
+    {
+        return $this->belongsTo(Store::class);
+    }
 
     /**
      * The attributes that should be cast to native types.

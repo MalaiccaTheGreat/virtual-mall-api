@@ -76,27 +76,4 @@ class VirtualAssistantController extends Controller
         return "Thank you for your message! I'm here to help you with fashion advice, product recommendations, virtual try-ons, and shopping assistance at Pulse & Threads Virtual Mall. Feel free to ask me anything about our products or services!";
     }
 
-    private function generateResponse($message)
-    {
-        // Simple response logic - you can enhance this with AI or more complex logic
-        $message = strtolower($message);
-        
-        if (str_contains($message, 'hello') || str_contains($message, 'hi')) {
-            return 'Hello! How can I help you today?';
-        }
-        
-        if (str_contains($message, 'product') || str_contains($message, 'price')) {
-            return 'You can find all our products and their prices on the products page. Would you like me to help you find something specific?';
-        }
-        
-        if (str_contains($message, 'delivery') || str_contains($message, 'shipping')) {
-            return 'We offer delivery services across Zambia. Delivery times vary by location. Would you like to know more about delivery options?';
-        }
-        
-        if (str_contains($message, 'payment') || str_contains($message, 'pay')) {
-            return 'We accept various payment methods including mobile money, bank transfers, and cash on delivery. How would you like to proceed with payment?';
-        }
-        
-        return "I'm here to help! Could you please provide more details about what you're looking for?";
-    }
 }

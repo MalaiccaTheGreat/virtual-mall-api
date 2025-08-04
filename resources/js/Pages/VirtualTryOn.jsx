@@ -1,12 +1,52 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, Suspense } from 'react';
 import { Head, Link } from '@inertiajs/react';
+import { Canvas } from '@react-three/fiber';
+import { OrbitControls, useGLTF } from '@react-three/drei';
 import Button from '../components/Button';
 import Layout from '../components/Layout';
+
+function Avatar({ selectedItems }) {
+  const { scene } = useGLTF('/models/avatar.glb');
+
+  return (
+    <group>
+      <primitive object={scene} scale={1} position={[0, -1, 0]} />
+      {Object.values(selectedItems).flat().map(item => (
+        <ClothingItem key={item.id} item={item} />
+      ))}
+    </group>
+  );
+}
+
+function ClothingItem({ item }) {
+  const { scene } = useGLTF(item.product.try_on_model_path);
+  return <primitive object={scene} scale={1} position={[0, -1, 0]} />;
+}
+
+function ModelViewer({ selectedItems }) {
+  return (
+    <Canvas camera={{ position: [0, 0, 2.5] }}>
+      <Suspense fallback={null}>
+        <ambientLight intensity={0.5} />
+        <pointLight position={[10, 10, 10]} />
+        <Avatar selectedItems={selectedItems} />
+        <OrbitControls />
+      </Suspense>
+    </Canvas>
+  );
+}
+
 
 export default function VirtualTryOn({ products }) {
   const [currentSession, setCurrentSession] = useState(null);
   const [modelType, setModelType] = useState('3d_model');
-  const [selectedItems, setSelectedItems] = useState({});
+  const [selectedItems, setSelectedItems] = useState({
+    top: [],
+    bottom: [],
+    shoes: [],
+    accessories: [],
+    full_outfit: [],
+  });
   const [bodyMeasurements, setBodyMeasurements] = useState({
     height: '',
     weight: '',
@@ -60,6 +100,8 @@ export default function VirtualTryOn({ products }) {
   const addItemToTryOn = async (product, category, size = null, colorVariant = null) => {
     if (!currentSession) {
       await createTryOnSession();
+      // This is a bit of a hack. After creating the session, we should re-run this function.
+      // For now, we'll just return and let the user click again.
       return;
     }
 
@@ -81,10 +123,15 @@ export default function VirtualTryOn({ products }) {
 
       const data = await response.json();
       if (data.success) {
-        setSelectedItems(prev => ({
-          ...prev,
-          [category]: data.item
-        }));
+        setSelectedItems(prev => {
+          const updated = { ...prev };
+          if (category !== 'accessories') {
+            updated[category] = [data.item];
+          } else {
+            updated[category] = [...updated[category], data.item];
+          }
+          return updated;
+        });
       }
     } catch (error) {
       console.error('Error adding item:', error);
@@ -109,7 +156,7 @@ export default function VirtualTryOn({ products }) {
       if (data.success) {
         setSelectedItems(prev => {
           const updated = { ...prev };
-          delete updated[category];
+          updated[category] = updated[category].filter(item => item.id !== itemId);
           return updated;
         });
       }
@@ -119,17 +166,37 @@ export default function VirtualTryOn({ products }) {
   };
 
   const addAllToCart = async () => {
-    if (!currentSession || Object.keys(selectedItems).length === 0) return;
+    const allItems = Object.values(selectedItems).flat();
+    if (!currentSession || allItems.length === 0) return;
+    addItemsToCart(allItems);
+  };
 
+  const addPartialToCart = async () => {
+    const selectedCheckboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+    const selectedItems = Array.from(selectedCheckboxes).map(cb => {
+        const item = Object.values(selectedItems).flat().find(item => item.id == cb.dataset.itemId);
+        return item;
+    });
+
+    if (!currentSession || selectedItems.length === 0) return;
+    addItemsToCart(selectedItems);
+  };
+
+  const addItemsToCart = async (items) => {
     try {
-      const response = await fetch('/api/try-on/add-to-cart', {
+      const response = await fetch('/api/cart/add-multiple', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
         },
         body: JSON.stringify({
-          session_id: currentSession
+          items: items.map(item => ({
+            id: item.product.id,
+            quantity: 1,
+            price: item.product.price,
+            name: item.product.name,
+          }))
         })
       });
 
@@ -156,6 +223,9 @@ export default function VirtualTryOn({ products }) {
     );
   };
 
+  useGLTF.preload('/models/avatar.glb');
+  useGLTF.preload(products.map(p => p.try_on_model_path).filter(p => p));
+
   return (
     <Layout>
       <Head title="Virtual Try-On - Pulse & Threads Virtual Mall" />
@@ -171,7 +241,7 @@ export default function VirtualTryOn({ products }) {
                   className="w-12 h-12 rounded-full object-cover"
                 />
                 <div>
-                  <h1 className="text-3xl font-bold" style={{ color: '#1e3a8a' }}>
+                  <h1 className="text-3xl font-bold" style={{ color: '#002366' }}>
                     Virtual Try-On Experience
                   </h1>
                   <p style={{ color: '#FFD700' }} className="text-lg">
@@ -306,18 +376,9 @@ export default function VirtualTryOn({ products }) {
                 <h2 className="text-xl font-semibold mb-4">Virtual Model</h2>
                 <div className="aspect-w-3 aspect-h-4 bg-gray-100 rounded-lg flex items-center justify-center min-h-96">
                   {currentSession ? (
-                    <div className="text-center">
+                    <div className="text-center w-full h-full">
                       {modelType === '3d_model' ? (
-                        <div className="space-y-4">
-                          <div className="w-64 h-80 bg-gradient-to-b from-blue-100 to-blue-200 rounded-lg mx-auto flex items-center justify-center">
-                            <span className="text-gray-600">3D Avatar Model</span>
-                          </div>
-                          {Object.keys(selectedItems).length > 0 && (
-                            <div className="text-sm text-gray-600">
-                              Currently trying on: {Object.keys(selectedItems).join(', ')}
-                            </div>
-                          )}
-                        </div>
+                        <ModelViewer selectedItems={selectedItems} />
                       ) : (
                         <div className="space-y-4">
                           {userPhoto && (
@@ -341,32 +402,54 @@ export default function VirtualTryOn({ products }) {
                 </div>
 
                 {/* Selected Items Summary */}
-                {Object.keys(selectedItems).length > 0 && (
+                {Object.values(selectedItems).flat().length > 0 && (
                   <div className="mt-6">
                     <h3 className="text-lg font-semibold mb-4">Currently Trying On</h3>
                     <div className="space-y-2">
-                      {Object.entries(selectedItems).map(([category, item]) => (
-                        <div key={category} className="flex items-center justify-between p-3 bg-gray-50 rounded">
-                          <div>
-                            <span className="font-medium">{item.product.name}</span>
-                            <span className="text-gray-500 ml-2">({clothingCategories[category]})</span>
-                            <span className="text-green-600 font-semibold ml-2">${item.product.price}</span>
+                      {Object.entries(selectedItems).map(([category, items]) =>
+                        items.map(item => (
+                          <div key={item.id} className="flex items-center justify-between p-3 bg-gray-50 rounded">
+                            <div className="flex items-center">
+                              <input type="checkbox" className="mr-4" defaultChecked data-item-id={item.id} />
+                              <div>
+                                <span className="font-medium">{item.product.name}</span>
+                                <span className="text-gray-500 ml-2">({clothingCategories[category]})</span>
+                                <span className="text-green-600 font-semibold ml-2">
+                                  {localStorage.getItem('currency') === 'ZMW' ? `K${item.product.price_kwacha}` : `$${item.product.price}`}
+                                </span>
+                              </div>
+                            </div>
+                            <button
+                              onClick={() => removeItemFromTryOn(category, item.id)}
+                              className="text-red-600 hover:text-red-800 text-sm"
+                            >
+                              Remove
+                            </button>
                           </div>
-                          <button
-                            onClick={() => removeItemFromTryOn(category, item.id)}
-                            className="text-red-600 hover:text-red-800 text-sm"
-                          >
-                            Remove
-                          </button>
-                        </div>
-                      ))}
+                        ))
+                      )}
                     </div>
-                    <Button 
-                      onClick={addAllToCart}
-                      className="w-full mt-4 bg-green-600 hover:bg-green-700"
-                    >
-                      Add All to Cart (${Object.values(selectedItems).reduce((sum, item) => sum + parseFloat(item.product.price), 0).toFixed(2)})
-                    </Button>
+                    <div className="mt-4 flex justify-between items-center">
+                        <span className="text-xl font-bold">
+                            Total: {localStorage.getItem('currency') === 'ZMW'
+                                ? `K${Object.values(selectedItems).flat().reduce((sum, item) => sum + parseFloat(item.product.price_kwacha), 0).toFixed(2)}`
+                                : `$${Object.values(selectedItems).flat().reduce((sum, item) => sum + parseFloat(item.product.price), 0).toFixed(2)}`}
+                        </span>
+                        <div>
+                            <Button
+                              onClick={addPartialToCart}
+                              className="mr-2 bg-blue-600 hover:bg-blue-700"
+                            >
+                              Add Selected to Cart
+                            </Button>
+                            <Button
+                              onClick={addAllToCart}
+                              className="bg-green-600 hover:bg-green-700"
+                            >
+                              Add Full Outfit to Cart
+                            </Button>
+                        </div>
+                    </div>
                   </div>
                 )}
               </div>
