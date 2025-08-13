@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Pulse & Threads Virtual Mall - Experience the future of fashion with our innovative virtual mall platform" />
+    <title>Pulse & Threads Virtual Mall</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#1e3a8a">
+    
+    <!-- Preload critical assets -->
+    <link rel="preload" href="/assets/Logo.jpeg" as="image">
+  </head>
+  <body>
+    <header></header>
+
+    <main>
+      <section class="welcome-hero">
+        <img
+          src="./assets/Logo.jpeg"
+          alt="Pulse & Threads Logo"
+          class="hero-logo"
+        />
+        <h1>Welcome to Pulse & Threads<br />Virtual Mall</h1>
+        <p>
+          Experience the future of shopping with our innovative virtual mall
+          platform. Try on clothes virtually, shop seamlessly, and discover your
+          perfect style.
+        </p>
+        <div class="hero-buttons">
+          <a href="/pages/signup.html" class="cta-button">Create Account</a>
+          <a href="/pages/products.html" class="cta-button cta-button-outline"
+            >Browse Products</a
+          >
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <p>&copy; 2025 Pulse & Threads Virtual Mall. All rights reserved.</p>
+    </footer>
+
+    <script src="js/app.js"></script>
+
+    <!-- Virtual Assistant -->
+    <div id="virtual-assistant-container">
+      <div id="chat-container">
+        <div id="chat-widget">
+          <div id="chat-prompt">
+            <img src="./assets/message.svg" alt="Message Icon" />
+            <span>How can I help you?</span>
+          </div>
+          <div id="chat-icon">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 512 512"
+              fill="currentColor"
+            >
+              <path
+                d="M256 32C114.6 32 0 146.6 0 288c0 86.1 42.1 162.2 109.8 209.4c-4.6 23.4-16.1 61.2-19.3 73.4c-2.6 10.2 7.7 19.4 17.7 15.5c42.4-16.4 89.3-43.3 126.5-73.2c21.2 3.6 43.1 5.5 65.3 5.5c141.4 0 256-114.6 256-256S397.4 32 256 32z"
+              />
+            </svg>
+          </div>
+        </div>
+
+        <div id="chat-window" class="hidden">
+          <div id="chat-header">
+            <span>Virtual Assistant</span>
+            <button id="close-chat">X</button>
+          </div>
+          <div id="chat-body">
+            <div id="chat-messages"></div>
+            <div id="assistant-avatar-container" class="hidden">
+              <img
+                src="./assets/logo.png"
+                alt="Assistant Avatar"
+                id="assistant-avatar"
+              />
+            </div>
+          </div>
+          <div id="chat-footer">
+            <button id="mic-button">
+              <img src="./assets/mic.svg" alt="Mic Icon" />
+            </button>
+            <input
+              type="text"
+              id="chat-input"
+              placeholder="Ask me anything..."
+            />
+            <button id="send-button">
+              <img src="./assets/send.svg" alt="Send Icon" />
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="js/assistant.js"></script>
+  </body>
+</html>

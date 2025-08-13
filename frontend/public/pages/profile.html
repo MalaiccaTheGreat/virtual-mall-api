@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Profile - Pulse & Threads Virtual Mall</title>
+    <link rel="stylesheet" href="../css/style.css" />
+  </head>
+  <body>
+    <header>
+      <div class="logo">
+        <img src="../assets/logo.png" alt="Pulse & Threads Logo" />
+        <h1>Pulse & Threads Virtual Mall</h1>
+      </div>
+      <nav>
+        <ul>
+          <!-- Navigation is now dynamically loaded by app.js -->
+        </ul>
+      </nav>
+    </header>
+
+    <main>
+      <h2>Your Profile</h2>
+      <div class="profile-container" id="profile-container">
+        <!-- Profile content will be loaded by JavaScript -->
+      </div>
+    </main>
+
+    <footer>
+      <p>&copy; 2025 Pulse & Threads Virtual Mall. All rights reserved.</p>
+    </footer>
+
+    <script src="../js/app.js"></script>
+    <script src="../js/profile.js"></script>
+
+    <!-- Virtual Assistant -->
+    <div id="virtual-assistant-container">
+      <div id="chat-icon">
+        <img
+          src="../assets/chat-icon.png"
+          alt="Chat Icon"
+          style="filter: brightness(0) invert(1)"
+        />
+      </div>
+      <div id="chat-window" class="hidden">
+        <div id="chat-header">
+          <span>Pulse & Threads Assistant</span>
+          <button id="close-chat">-</button>
+        </div>
+        <div id="chat-body">
+          <div class="message assistant">Hello! How can I help you today?</div>
+        </div>
+        <div id="chat-input-container">
+          <input type="text" id="chat-input" placeholder="Ask me anything..." />
+          <button id="send-message">Send</button>
+          <button id="speech-input">🎤</button>
+        </div>
+      </div>
+    </div>
+    <script src="../js/assistant.js"></script>
+  </body>
+</html>
