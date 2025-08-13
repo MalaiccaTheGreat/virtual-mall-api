@@ -16,6 +16,7 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
+<<<<<<< HEAD
         if ($request->has('search')) {
             $query = Product::search($request->search);
         } else {
@@ -23,6 +24,17 @@ class ProductController extends Controller
         }
 
         $query->with('media')
+=======
+        $query = Product::query()
+            ->with('media')
+            ->when($request->search, function ($query, $search) {
+                $query->where(function($q) use ($search) {
+                    $q->where('name', 'like', "%{$search}%")
+                      ->orWhere('description', 'like', "%{$search}%")
+                      ->orWhere('sku', 'like', "%{$search}%");
+                });
+            })
+>>>>>>> 45a42bb6b8f003179c57eadf18b2f7ae496b5430
             ->when($request->has('in_stock'), function ($query) {
                 $query->where('stock_quantity', '>', 0);
             })

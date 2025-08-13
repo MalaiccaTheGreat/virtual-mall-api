@@ -17,6 +17,7 @@ class ProductFactory extends Factory
     public function definition(): array
     {
         return [
+<<<<<<< HEAD
             'name' => $this->faker->words(3, true),
             'description' => $this->faker->paragraph,
             'price' => $this->faker->randomFloat(2, 10, 100),
@@ -27,6 +28,9 @@ class ProductFactory extends Factory
             'clothing_category' => $this->faker->randomElement(['top', 'bottom', 'shoes', 'accessories']),
             'available_sizes' => ['S', 'M', 'L', 'XL'],
             'color_variants' => ['Red', 'Green', 'Blue'],
+=======
+            //
+>>>>>>> 45a42bb6b8f003179c57eadf18b2f7ae496b5430
         ];
     }
 }

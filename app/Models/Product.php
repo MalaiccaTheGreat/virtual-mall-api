@@ -30,6 +30,7 @@ class Product extends Model implements HasMedia
         'available_sizes',
         'color_variants',
         'try_on_model_path',
+<<<<<<< HEAD
         'is_try_on_enabled',
         'store_id',
     ];
@@ -39,6 +40,11 @@ class Product extends Model implements HasMedia
         return $this->belongsTo(Store::class);
     }
 
+=======
+        'is_try_on_enabled'
+    ];
+
+>>>>>>> 45a42bb6b8f003179c57eadf18b2f7ae496b5430
     /**
      * The attributes that should be cast to native types.
      *

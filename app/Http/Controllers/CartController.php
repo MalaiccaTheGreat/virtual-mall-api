@@ -134,6 +134,7 @@ class CartController extends Controller
 
         return response()->json($cart->load('items'));
     }
+<<<<<<< HEAD
 
     public function addMultiple(Request $request): JsonResponse
     {
@@ -174,4 +175,6 @@ class CartController extends Controller
             'cart' => $cart->load('items')
         ]);
     }
+=======
+>>>>>>> 45a42bb6b8f003179c57eadf18b2f7ae496b5430
 }

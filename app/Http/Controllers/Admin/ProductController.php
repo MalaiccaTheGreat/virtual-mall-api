@@ -12,9 +12,13 @@ class ProductController extends Controller
      */
     public function index()
     {
+<<<<<<< HEAD
         return Inertia::render('Admin/Products/Index', [
             'products' => Product::with('store')->paginate(10)
         ]);
+=======
+        //
+>>>>>>> 45a42bb6b8f003179c57eadf18b2f7ae496b5430
     }
 
     /**
@@ -22,9 +26,13 @@ class ProductController extends Controller
      */
     public function create()
     {
+<<<<<<< HEAD
         return Inertia::render('Admin/Products/Create', [
             'stores' => Store::all(['id', 'name'])
         ]);
+=======
+        //
+>>>>>>> 45a42bb6b8f003179c57eadf18b2f7ae496b5430
     }
 
     /**
@@ -32,6 +40,7 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
+<<<<<<< HEAD
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
@@ -49,6 +58,9 @@ class ProductController extends Controller
         }
 
         return redirect()->route('admin.products.index')->with('success', 'Product created successfully.');
+=======
+        //
+>>>>>>> 45a42bb6b8f003179c57eadf18b2f7ae496b5430
     }
 
     /**
@@ -62,17 +74,24 @@ class ProductController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
+<<<<<<< HEAD
     public function edit(Product $product)
     {
         return Inertia::render('Admin/Products/Edit', [
             'product' => $product,
             'stores' => Store::all(['id', 'name'])
         ]);
+=======
+    public function edit(string $id)
+    {
+        //
+>>>>>>> 45a42bb6b8f003179c57eadf18b2f7ae496b5430
     }
 
     /**
      * Update the specified resource in storage.
      */
+<<<<<<< HEAD
     public function update(Request $request, Product $product)
     {
         $validated = $request->validate([
@@ -92,15 +111,26 @@ class ProductController extends Controller
         }
 
         return redirect()->route('admin.products.index')->with('success', 'Product updated successfully.');
+=======
+    public function update(Request $request, string $id)
+    {
+        //
+>>>>>>> 45a42bb6b8f003179c57eadf18b2f7ae496b5430
     }
 
     /**
      * Remove the specified resource from storage.
      */
+<<<<<<< HEAD
     public function destroy(Product $product)
     {
         $product->delete();
 
         return redirect()->route('admin.products.index')->with('success', 'Product deleted successfully.');
+=======
+    public function destroy(string $id)
+    {
+        //
+>>>>>>> 45a42bb6b8f003179c57eadf18b2f7ae496b5430
     }
 }

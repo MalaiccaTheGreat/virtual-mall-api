@@ -12,6 +12,7 @@ class ProductSeeder extends Seeder
         $products = [
             [
                 'name' => 'Crochet Dress',
+<<<<<<< HEAD
                 'price' => 14.58,
                 'image_path' => '/images/Crochet_Dress.jpg',
                 'category' => 'women',
@@ -108,6 +109,68 @@ class ProductSeeder extends Seeder
                 'try_on_model_path' => '/models/sweat_pants.glb',
                 'available_sizes' => ['S', 'M', 'L', 'XL'],
                 'color_variants' => ['Gray', 'Black'],
+=======
+                'price_kwacha' => 350,
+                'price_usd' => 14.58, // Assuming 1 USD = 24 ZMW
+                'image_path' => 'Crochet_Dress.jpg',
+                'category' => 'Dresses'
+            ],
+            [
+                'name' => 'Crochet Shirt Unisex',
+                'price_kwacha' => 350,
+                'price_usd' => 14.58,
+                'image_path' => 'Crochet_shirt_unisex.jpg',
+                'category' => 'Shirts'
+            ],
+            [
+                'name' => 'Crocs Black',
+                'price_kwacha' => 200,
+                'price_usd' => 8.33,
+                'image_path' => 'Crocs_black.jpg',
+                'category' => 'Shoes'
+            ],
+            [
+                'name' => 'Crocs Brown',
+                'price_kwacha' => 200,
+                'price_usd' => 8.33,
+                'image_path' => 'Crocs_Brown.jpg',
+                'category' => 'Shoes'
+            ],
+            [
+                'name' => 'Malak Tshirts White',
+                'price_kwacha' => 300,
+                'price_usd' => 12.50,
+                'image_path' => 'Malak_tshirts(white).jpg',
+                'category' => 'T-shirts'
+            ],
+            [
+                'name' => 'Malak Tshirts',
+                'price_kwacha' => 300,
+                'price_usd' => 12.50,
+                'image_path' => 'Malak_Tshirts.jpg',
+                'category' => 'T-shirts'
+            ],
+            [
+                'name' => 'Mario Alborino Nike Shoes',
+                'price_kwacha' => 1200,
+                'price_usd' => 50.00,
+                'image_path' => 'Mario_Alborino_Nike_Shoes.jpg',
+                'category' => 'Shoes'
+            ],
+            [
+                'name' => 'New Balance Shoes',
+                'price_kwacha' => 800,
+                'price_usd' => 33.33,
+                'image_path' => 'New_Balance_Shoes.jpg',
+                'category' => 'Shoes'
+            ],
+            [
+                'name' => 'Sweat Pants',
+                'price_kwacha' => 250,
+                'price_usd' => 10.42,
+                'image_path' => 'Sweat_pants.jpg',
+                'category' => 'Pants'
+>>>>>>> 45a42bb6b8f003179c57eadf18b2f7ae496b5430
             ],
         ];
 
