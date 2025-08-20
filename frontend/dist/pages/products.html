@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Products - Pulse & Threads Virtual Mall</title>
+    <link rel="stylesheet" href="../css/style.css" />
+  </head>
+  <body>
+    <header>
+      <div class="logo">
+        <img src="../assets/logo.png" alt="Pulse & Threads Logo" />
+        <h1>Pulse & Threads Virtual Mall</h1>
+      </div>
+      <nav>
+        <ul>
+          <!-- Navigation is now dynamically loaded by app.js -->
+        </ul>
+      </nav>
+    </header>
+
+    <main class="container products-page">
+      <h2>Our Products</h2>
+      <input
+        type="text"
+        id="product-search"
+        placeholder="Search for products..."
+      />
+      <div id="loader" class="loader"></div>
+      <div id="product-grid" class="product-grid">
+        <!-- Products will be loaded here by JavaScript -->
+      </div>
+    </main>
+
+    <footer>
+      <p>&copy; 2025 Pulse & Threads Virtual Mall. All rights reserved.</p>
+    </footer>
+
+    <script src="../js/products.js"></script>
+
+    <!-- Virtual Assistant -->
+    <div id="virtual-assistant-container">
+      <div id="chat-icon">
+        <img
+          src="../assets/chat-icon.png"
+          alt="Chat Icon"
+          style="filter: brightness(0) invert(1)"
+        />
+      </div>
+      <div id="chat-window" class="hidden">
+        <div id="chat-header">
+          <span>Pulse & Threads Assistant</span>
+          <button id="close-chat">-</button>
+        </div>
+        <div id="chat-body">
+          <div class="message assistant">Hello! How can I help you today?</div>
+        </div>
+        <div id="chat-input-container">
+          <input type="text" id="chat-input" placeholder="Ask me anything..." />
+          <button id="send-message">Send</button>
+          <button id="speech-input">🎤</button>
+        </div>
+      </div>
+    </div>
+    <script src="../js/assistant.js"></script>
+  </body>
+</html>

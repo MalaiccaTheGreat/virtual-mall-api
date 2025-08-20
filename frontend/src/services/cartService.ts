@@ -31,9 +31,8 @@ const handleResponse = async <T>(response: Response): Promise<T> => {
   return data.data as T;
 };
 
-export const cartService = {
-  // Get cart items
-  async getCart(): Promise<CartResponse> {
+// Get cart items
+export async function getCart(): Promise<CartResponse> {
     const response = await fetch(`${API_BASE_URL}/cart`, {
       credentials: 'include',
       headers: {
@@ -41,10 +40,10 @@ export const cartService = {
       },
     });
     return handleResponse<CartResponse>(response);
-  },
+}
 
-  // Add item to cart
-  async addToCart(productId: number | string, quantity: number, size?: string, color?: string): Promise<CartResponse> {
+// Add item to cart
+export async function addToCart(productId: number | string, quantity: number, size?: string, color?: string): Promise<CartResponse> {
     const response = await fetch(`${API_BASE_URL}/cart/items`, {
       method: 'POST',
       credentials: 'include',
@@ -59,10 +58,10 @@ export const cartService = {
       }),
     });
     return handleResponse<CartResponse>(response);
-  },
+}
 
-  // Update cart item quantity
-  async updateCartItem(itemId: number | string, quantity: number): Promise<CartResponse> {
+// Update cart item quantity
+export async function updateCartItem(itemId: number | string, quantity: number): Promise<CartResponse> {
     const response = await fetch(`${API_BASE_URL}/cart/items/${itemId}`, {
       method: 'PUT',
       credentials: 'include',
@@ -72,10 +71,10 @@ export const cartService = {
       body: JSON.stringify({ quantity }),
     });
     return handleResponse<CartResponse>(response);
-  },
+}
 
-  // Remove item from cart
-  async removeFromCart(itemId: number | string): Promise<CartResponse> {
+// Remove item from cart
+export async function removeFromCart(itemId: number | string): Promise<CartResponse> {
     const response = await fetch(`${API_BASE_URL}/cart/items/${itemId}`, {
       method: 'DELETE',
       credentials: 'include',
@@ -84,10 +83,10 @@ export const cartService = {
       },
     });
     return handleResponse<CartResponse>(response);
-  },
+}
 
-  // Clear cart
-  async clearCart(): Promise<{ success: boolean }> {
+// Clear cart
+export async function clearCart(): Promise<{ success: boolean }> {
     const response = await fetch(`${API_BASE_URL}/cart/clear`, {
       method: 'POST',
       credentials: 'include',
@@ -96,10 +95,10 @@ export const cartService = {
       },
     });
     return handleResponse<{ success: boolean }>(response);
-  },
+}
 
-  // Get cart count
-  async getCartCount(): Promise<{ count: number }> {
+// Get cart count
+export async function getCartCount(): Promise<{ count: number }> {
     const response = await fetch(`${API_BASE_URL}/cart/count`, {
       credentials: 'include',
       headers: {
@@ -107,5 +106,4 @@ export const cartService = {
       },
     });
     return handleResponse<{ count: number }>(response);
-  },
-};
+}

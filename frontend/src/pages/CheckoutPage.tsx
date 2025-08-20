@@ -279,9 +279,8 @@ export const CheckoutPage = () => {
                       onChange={handleChange}
                       onBlur={handleBlur}
                       aria-invalid={hasError('paymentMethod')}
-                      aria-describedby={hasError('paymentMethod') ? 'payment-method-error' : undefined}
+                      aria-describedby={`credit-description ${hasError('paymentMethod') ? 'payment-method-error' : ''}`}
                       className="h-4 w-4 text-blue-600 focus:ring-2 focus:ring-blue-500 border-gray-300"
-                      aria-describedby="credit-description"
                     />
                     <div className="ml-3">
                       <label htmlFor="credit" className="block text-sm font-medium text-gray-700">
@@ -302,9 +301,8 @@ export const CheckoutPage = () => {
                       onChange={handleChange}
                       onBlur={handleBlur}
                       aria-invalid={hasError('paymentMethod')}
-                      aria-describedby={hasError('paymentMethod') ? 'payment-method-error' : undefined}
+                      aria-describedby={`paypal-description ${hasError('paymentMethod') ? 'payment-method-error' : ''}`}
                       className="h-4 w-4 text-blue-600 focus:ring-2 focus:ring-blue-500 border-gray-300"
-                      aria-describedby="paypal-description"
                     />
                     <div className="ml-3">
                       <label htmlFor="paypal" className="block text-sm font-medium text-gray-700">

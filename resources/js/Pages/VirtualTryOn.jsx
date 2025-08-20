@@ -424,6 +424,8 @@ export default function VirtualTryOn({ products }) {
           </div>
         </div>
       </div>
-    </Layout>
+      </div>
+    </div>
+  </Layout>
   );
 }

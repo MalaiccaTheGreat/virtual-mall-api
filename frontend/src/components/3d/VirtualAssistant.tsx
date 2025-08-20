@@ -110,7 +110,7 @@ function Model({
   );
 }
 
-export default function VirtualAssistant({ 
+export function VirtualAssistant({ 
   onSpeak, 
   onExpressionChange, 
   className = '' 

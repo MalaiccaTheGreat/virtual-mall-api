@@ -1,4 +1,4 @@
-import { Component, ErrorInfo, ReactNode } from 'react';
+import { Component, ErrorInfo, ReactNode, useState } from 'react';
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
 
 interface ErrorBoundaryProps {

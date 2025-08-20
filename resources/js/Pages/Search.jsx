@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Head } from '@inertiajs/react';
-import algoliasearch from 'algoliasearch/lite';
+import * as algoliasearch from 'algoliasearch/lite';
 import { InstantSearch, SearchBox, Hits, Pagination } from 'react-instantsearch';
 import ProductList from '../components/ProductList';
 

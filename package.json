@@ -1,33 +1,42 @@
 {
-  "$schema": "https://json.schemastore.org/package.json",
+  "name": "virtual-mall-frontend",
   "private": true,
+  "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "build": "vite build",
-    "dev": "vite",
-    "preview": "vite preview"
-  },
-  "devDependencies": {
-    "@tailwindcss/vite": "^4.0.0",
-    "@vitejs/plugin-react": "^4.0.0",
-    "axios": "^1.8.2",
-    "laravel-vite-plugin": "^1.2.0",
-    "tailwindcss": "^4.0.0",
-    "vite": "^6.2.4"
+    "dev": "vite --config vite.minimal.cjs",
+    "build": "vite build --config vite.minimal.cjs",
+    "preview": "vite preview --config vite.minimal.cjs",
+    "dev:hot": "vite --host --config vite.minimal.cjs",
+    "prod": "vite build --mode production --config vite.minimal.cjs"
   },
   "dependencies": {
-    "@inertiajs/react": "^2.0.12",
-<<<<<<< HEAD
+    "@inertiajs/react": "^1.0.0",
     "@react-three/drei": "^9.65.3",
     "@react-three/fiber": "^8.13.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
+    "algoliasearch": "^5.35.0",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "react-instantsearch": "^7.16.2",
     "three": "^0.151.3"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.33.0",
+    "@types/node": "^24.3.0",
+    "@types/react": "^19.1.10",
+    "@types/react-dom": "^19.1.7",
+    "@vitejs/plugin-react": "^5.0.1",
+    "@vitejs/plugin-react-refresh": "^1.3.6",
+    "autoprefixer": "^10.4.21",
+    "eslint": "^9.33.0",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.4.20",
+    "globals": "^16.3.0",
+    "laravel-vite-plugin": "^0.8.1",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.12",
+    "typescript": "^5.9.2",
+    "vite": "^4.5.2",
+    "vite-plugin-laravel": "^0.3.1"
   }
 }
-=======
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
-  }
-}
->>>>>>> 45a42bb6b8f003179c57eadf18b2f7ae496b5430
