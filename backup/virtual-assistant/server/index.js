@@ -2,7 +2,8 @@ import express from 'express';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
 import OpenAI from 'openai';
-import { Voice } from 'elevenlabs-node';
+import elevenlabs from 'elevenlabs-node';
+const { Voice } = elevenlabs;
 import dotenv from 'dotenv';
 import cors from 'cors';
 

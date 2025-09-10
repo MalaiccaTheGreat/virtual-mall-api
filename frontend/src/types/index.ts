@@ -1,4 +1,5 @@
 export interface Product {
+  sizes: never[];
   id: string | number;
   name: string;
   description: string;

@@ -40,15 +40,29 @@ export default defineConfig({
     outDir: 'public/build',
     emptyOutDir: true,
     manifest: true,
+    sourcemap: true, // Enable source maps for better debugging
+    minify: 'terser', // Use terser for better minification
+    cssCodeSplit: true, // Enable CSS code splitting
+    reportCompressedSize: true, // Show gzipped size in bundle analysis
+    chunkSizeWarningLimit: 1000, // Set chunk size warning limit to 1MB
     rollupOptions: {
       input: {
         app: resolve(__dirname, 'resources/js/app.jsx'),
       },
       output: {
-        entryFileNames: 'assets/[name].[hash].js',
-        chunkFileNames: 'assets/[name].[hash].js',
+        entryFileNames: 'assets/js/[name].[hash].js',
+        chunkFileNames: 'assets/js/[name].[hash].js',
         assetFileNames: (assetInfo) => {
-          if (assetInfo.name.endsWith('.css')) return 'assets/[name][extname]';
+          // Organize assets into subdirectories
+          if (assetInfo.name.endsWith('.css')) {
+            return 'assets/css/[name].[hash][extname]';
+          }
+          if (['.png', '.jpg', '.jpeg', '.gif', '.svg', '.webp'].some(ext => assetInfo.name.endsWith(ext))) {
+            return 'assets/images/[name].[hash][extname]';
+          }
+          if (['.woff', '.woff2', '.eot', '.ttf', '.otf'].some(ext => assetInfo.name.endsWith(ext))) {
+            return 'assets/fonts/[name].[hash][extname]';
+          }
           return 'assets/[name].[hash][extname]';
         },
       },

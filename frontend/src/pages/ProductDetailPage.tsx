@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
-import { StarIcon, HeartIcon, ArrowLeftIcon, ShoppingCartIcon } from '@heroicons/react/24/outline';
-import { Product } from '../types';
+import { useParams, useNavigate}from 'react-router-dom';
+import { StarIcon, HeartIcon, ArrowLeftIcon, ShoppingCartIcon, ArrowsPointingOutIcon } from '@heroicons/react/24/outline';
+import { Product, ApiResponse } from '../types';
 import { useCart } from '../contexts/CartContext';
 import { ProductDetailSkeleton } from '../components/common/Skeleton';
 import { ProductGallery } from '../components/products/ProductGallery';
 import { RelatedProducts } from '../components/products/RelatedProducts';
+import { ARVirtualTryOn } from '../components/ar/ARVirtualTryOn';
 import { cn } from '../lib/utils';
+import { ARTryOn } from '../components/ar/ARTryOn';
 
 export const ProductDetailPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -18,10 +20,14 @@ export const ProductDetailPage = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
+  const [loadingRelated, setLoadingRelated] = useState(false);
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [selectedSize, setSelectedSize] = useState<string>('');
   const [selectedColor, setSelectedColor] = useState<string>('');
   const [isAddingToCart, setIsAddingToCart] = useState(false);
+  const [showARTryOn, setShowARTryOn] = useState(false);
+  const [activeTab, setActiveTab] = useState<'gallery' | 'ar'>('gallery');
+  const [showFullscreenAR, setShowFullscreenAR] = useState(false);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -86,8 +92,16 @@ export const ProductDetailPage = () => {
   const handleColorSelect = (color: string) => {
     setSelectedColor(color);
   };
-  
+
   const productIsInCart = product ? isInCart(product.id) : false;
+
+  // Check if product is eligible for AR try-on
+  const isEligibleForARTryOn = product?.category?.toLowerCase().includes('clothing') || 
+                              product?.tags?.includes('ar-enabled');
+
+  // Check if product is in sunglasses category (you might need to adjust this based on your category structure)
+  const isSunglasses = product?.category?.toLowerCase().includes('sunglasses') || 
+                       product?.name?.toLowerCase().includes('sunglass');
 
   if (loading) {
     return <ProductDetailSkeleton />;
@@ -108,14 +122,20 @@ export const ProductDetailPage = () => {
     );
   }
 
-  const availableSizes = product.available_sizes ? JSON.parse(product.available_sizes) : [];
-  const colorVariants = product.color_variants ? JSON.parse(product.color_variants) : [];
-  const productImages = [
-    product.image_path,
-    product.image_path, // In a real app, these would be different images
-    product.image_path,
-    product.image_path,
-  ].filter(Boolean);
+  const parseJsonSafely = <T,>(jsonString: string | undefined, defaultValue: T): T => {
+    try {
+      return jsonString ? JSON.parse(jsonString) : defaultValue;
+    } catch (error) {
+      console.error('Error parsing JSON:', error);
+      return defaultValue;
+    }
+  };
+
+  const availableSizes = parseJsonSafely<string[]>(product.available_sizes, []);
+  const colorVariants = parseJsonSafely<string[]>(product.color_variants, []);
+  const productImages = product.image_path 
+    ? [product.image_path]
+    : ['/images/placeholder-product.jpg'];
 
   const features = [
     'High-quality material',
@@ -123,6 +143,44 @@ export const ProductDetailPage = () => {
     'Designed for comfort',
     'Easy to maintain',
   ];
+
+  // Fetch related products when product loads
+  useEffect(() => {
+    const fetchRelatedProducts = async () => {
+      if (!product?.category) return;
+      
+      try {
+        setLoadingRelated(true);
+        const response = await fetch(`/api/products/related/${product.category}`);
+        if (response.ok) {
+          const data: ApiResponse<Product[]> = await response.json();
+          setRelatedProducts(data.data || []);
+        }
+      } catch (err) {
+        console.error('Error fetching related products:', err);
+      } finally {
+        setLoadingRelated(false);
+      }
+    };
+
+    fetchRelatedProducts();
+  }, [product?.category]);
+
+  // AR Try-On Modal
+  if (showARTryOn) {
+    return (
+      <div className="fixed inset-0 z-50 bg-black">
+        <ARVirtualTryOn 
+          garmentModelUrl={product?.ar_model_url || '/models/default-tshirt.glb'}
+          onClose={() => setShowARTryOn(false)}
+          onError={(error) => {
+            console.error('AR Error:', error);
+            setShowARTryOn(false);
+          }}
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -138,7 +196,46 @@ export const ProductDetailPage = () => {
         <div className="md:flex">
           {/* Product Gallery */}
           <div className="md:w-1/2 p-4">
-            <ProductGallery images={productImages} alt={product.name} />
+            {isSunglasses && (
+              <div className="mb-4 flex border-b border-gray-200">
+                <button
+                  type="button"
+                  className={`py-2 px-4 text-sm font-medium ${
+                    activeTab === 'gallery'
+                      ? 'border-b-2 border-blue-500 text-blue-600'
+                      : 'text-gray-500 hover:text-gray-700'
+                  }`}
+                  onClick={() => setActiveTab('gallery')}
+                >
+                  Gallery
+                </button>
+                <button
+                  type="button"
+                  className={`py-2 px-4 text-sm font-medium ${
+                    activeTab === 'ar'
+                      ? 'border-b-2 border-blue-500 text-blue-600'
+                      : 'text-gray-500 hover:text-gray-700'
+                  }`}
+                  onClick={() => setActiveTab('ar')}
+                >
+                  Try It On (AR)
+                </button>
+              </div>
+            )}
+            {activeTab === 'gallery' ? (
+              <ProductGallery images={productImages} alt={product.name} />
+            ) : (
+              <div className="relative rounded-lg overflow-hidden bg-gray-100" style={{ height: '500px' }}>
+                <ARTryOn />
+                <button
+                  onClick={() => setShowFullscreenAR(true)}
+                  className="absolute top-2 right-2 p-2 bg-black bg-opacity-50 rounded-full text-white hover:bg-opacity-70 focus:outline-none"
+                  aria-label="Expand AR view"
+                >
+                  <ArrowsPointingOutIcon className="h-5 w-5" />
+                </button>
+              </div>
+            )}
           </div>
 
           {/* Product Info */}
@@ -235,13 +332,23 @@ export const ProductDetailPage = () => {
                 </button>
               </div>
 
-              <div className="mt-6">
+              <div className="mt-6 space-y-3">
+                {isEligibleForARTryOn && (
+                  <button
+                    type="button"
+                    onClick={() => setShowARTryOn(true)}
+                    className="w-full flex items-center justify-center py-3 px-6 rounded-md font-medium bg-purple-600 text-white hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
+                  >
+                    <ArrowsPointingOutIcon className="h-5 w-5 mr-2" />
+                    Try It On (AR)
+                  </button>
+                )}
                 <button
                   type="button"
                   onClick={handleAddToCart}
-                  disabled={isAddingToCart || isInCart}
+                  disabled={isAddingToCart || productIsInCart}
                   className={`w-full flex items-center justify-center py-3 px-6 rounded-md font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 ${
-                    isInCart
+                    productIsInCart
                       ? 'bg-green-100 text-green-700 cursor-not-allowed'
                       : isAddingToCart
                       ? 'bg-blue-400 text-white cursor-wait'
@@ -250,7 +357,7 @@ export const ProductDetailPage = () => {
                 >
                   {isAddingToCart ? (
                     'Adding...'
-                  ) : isInCart ? (
+                  ) : productIsInCart ? (
                     <>
                       <ShoppingCartIcon className="h-5 w-5 mr-2" />
                       Added to Cart
@@ -370,6 +477,32 @@ export const ProductDetailPage = () => {
         category={product.category}
         limit={4}
       />
+
+      {/* Fullscreen AR Modal */}
+      {showFullscreenAR && (
+        <div className="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+          <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true" onClick={() => setShowFullscreenAR(false)}></div>
+            <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+            <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-4xl sm:w-full">
+              <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                <div className="w-full h-[80vh]">
+                  <ARTryOn />
+                </div>
+              </div>
+              <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                <button
+                  type="button"
+                  className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm"
+                  onClick={() => setShowFullscreenAR(false)}
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

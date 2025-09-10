@@ -1,9 +1,23 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { I18nextProvider } from 'react-i18next';
+import i18n from './i18n/i18n';
 import App from './App';
 import { ErrorBoundary } from './components/common/ErrorBoundary';
 import './index.css';
 import './style.css';
+
+// Set document direction based on language
+const updateDocumentDirection = (lng: string) => {
+  document.documentElement.lang = lng;
+  document.documentElement.dir = lng === 'ar' ? 'rtl' : 'ltr';
+};
+
+// Initialize direction on load
+updateDocumentDirection(i18n.language);
+
+// Listen for language changes
+i18n.on('languageChanged', updateDocumentDirection);
 
 // Global error handler for uncaught errors
 const handleGlobalError = (event: ErrorEvent) => {
@@ -43,11 +57,13 @@ const ErrorFallback = () => (
   </div>
 );
 
-// Render the app with error boundary
+// Render the app with error boundary and i18n provider
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
-    <ErrorBoundary fallback={<ErrorFallback />}>
-      <App />
-    </ErrorBoundary>
+    <I18nextProvider i18n={i18n}>
+      <ErrorBoundary fallback={<ErrorFallback />}>
+        <App />
+      </ErrorBoundary>
+    </I18nextProvider>
   </React.StrictMode>,
 );

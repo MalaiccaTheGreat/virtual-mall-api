@@ -1,0 +1,124 @@
+{
+  "a11y": {
+    "skipToContent": "Aller au contenu principal",
+    "searchProducts": "Rechercher des produits"
+  },
+  "common": {
+    "loading": "Chargement...",
+    "error": "Une erreur est survenue",
+    "retry": "Réessayer",
+    "cancel": "Annuler",
+    "save": "Enregistrer",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "back": "Retour",
+    "next": "Suivant",
+    "previous": "Précédent",
+    "submit": "Soumettre",
+    "search": "Rechercher..."
+  },
+  "header": {
+    "title": "Pulse & Threads",
+    "home": "Accueil",
+    "products": "Produits",
+    "categories": "Catégories",
+    "sale": "Soldes",
+    "cart": "Panier",
+    "account": "Compte",
+    "login": "Connexion",
+    "logout": "Déconnexion",
+    "language": "Langue",
+    "changeLanguage": "Changer de langue",
+    "logoAlt": "Logo de Pulse & Threads",
+    "addTranslation": "Ajouter une traduction",
+    "theme": "Thème"
+  },
+  "theme": {
+    "light": "Clair",
+    "dark": "Sombre",
+    "system": "Système",
+    "toggleToLight": "Passer en mode clair",
+    "toggleToDark": "Passer en mode sombre",
+    "toggleToSystem": "Utiliser les préférences système"
+  },
+  "home": {
+    "welcome": "Bienvenue sur {name}",
+    "tagline": "Découvrez une mode incroyable et achetez avec notre assistant virtuel.",
+    "browseProducts": "Parcourir les produits",
+    "tryVirtualAssistant": "Essayer l'assistant virtuel"
+  },
+  "footer": {
+    "about": "À propos",
+    "contact": "Contact",
+    "privacy": "Politique de confidentialité",
+    "terms": "Conditions d'utilisation",
+    "rights": "Tous droits réservés",
+    "newsletter": {
+      "title": "Abonnez-vous à notre newsletter",
+      "description": "Les dernières actualités, articles et ressources, envoyés chaque semaine dans votre boîte de réception.",
+      "emailPlaceholder": "Entrez votre email",
+      "subscribe": "S'abonner",
+      "success": "Merci pour votre abonnement !",
+      "error": "Échec de l'abonnement. Veuillez réessayer."
+    },
+    "social": {
+      "followUs": "Suivez-nous",
+      "facebook": "Facebook",
+      "twitter": "Twitter",
+      "instagram": "Instagram",
+      "youtube": "YouTube"
+    }
+  },
+  "product": {
+    "title": "Titre",
+    "price": "Prix",
+    "description": "Description",
+    "addToCart": "Ajouter au panier",
+    "outOfStock": "Rupture de stock",
+    "inStock": "En stock",
+    "quantity": "Quantité",
+    "relatedProducts": "Produits associés"
+  },
+  "cart": {
+    "title": "Panier d'achat",
+    "empty": "Votre panier est vide",
+    "subtotal": "Sous-total",
+    "shipping": "Livraison",
+    "tax": "Taxes",
+    "total": "Total",
+    "checkout": "Passer la commande",
+    "continueShopping": "Continuer les achats",
+    "remove": "Supprimer"
+  },
+  "checkout": {
+    "title": "Paiement",
+    "shippingAddress": "Adresse de livraison",
+    "billingAddress": "Adresse de facturation",
+    "paymentMethod": "Moyen de paiement",
+    "orderSummary": "Récapitulatif de la commande",
+    "placeOrder": "Passer la commande",
+    "sameAsShipping": "Identique à l'adresse de livraison"
+  },
+  "search": {
+    "placeholder": "Rechercher des produits...",
+    "noResults": "Aucun produit trouvé",
+    "error": "Erreur lors de la recherche de produits"
+  },
+  "validation": {
+    "required": "Ce champ est obligatoire",
+    "email": "Veuillez saisir une adresse email valide",
+    "minLength": "Doit contenir au moins {{count}} caractères",
+    "maxLength": "Ne doit pas dépasser {{count}} caractères",
+    "passwordMismatch": "Les mots de passe ne correspondent pas",
+    "invalidEmail": "Veuillez saisir une adresse email valide",
+    "invalidPhone": "Veuillez saisir un numéro de téléphone valide",
+    "invalidUrl": "Veuillez saisir une URL valide"
+  },
+  "error": {
+    "pageNotFound": "Page non trouvée",
+    "goToHome": "Retour à l'accueil",
+    "somethingWentWrong": "Quelque chose s'est mal passé. Veuillez réessayer plus tard.",
+    "networkError": "Erreur réseau. Veuillez vérifier votre connexion et réessayer.",
+    "pageLoadError": "Une erreur s'est produite lors du chargement de cette page."
+  }
+}

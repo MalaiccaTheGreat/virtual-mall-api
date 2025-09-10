@@ -1,0 +1,124 @@
+{
+  "a11y": {
+    "skipToContent": "跳转到主内容",
+    "searchProducts": "搜索产品"
+  },
+  "common": {
+    "loading": "加载中...",
+    "error": "发生错误",
+    "retry": "重试",
+    "cancel": "取消",
+    "save": "保存",
+    "delete": "删除",
+    "edit": "编辑",
+    "back": "返回",
+    "next": "下一步",
+    "previous": "上一步",
+    "submit": "提交",
+    "search": "搜索..."
+  },
+  "header": {
+    "title": "脉搏与线",
+    "home": "首页",
+    "products": "产品",
+    "categories": "分类",
+    "sale": "促销",
+    "cart": "购物车",
+    "account": "账户",
+    "login": "登录",
+    "logout": "退出登录",
+    "language": "语言",
+    "changeLanguage": "切换语言",
+    "logoAlt": "脉搏与线标志",
+    "addTranslation": "添加翻译",
+    "theme": "主题"
+  },
+  "theme": {
+    "light": "浅色",
+    "dark": "深色",
+    "system": "系统",
+    "toggleToLight": "切换到浅色模式",
+    "toggleToDark": "切换到深色模式",
+    "toggleToSystem": "使用系统设置"
+  },
+  "home": {
+    "welcome": "欢迎来到{name}",
+    "tagline": "发现精彩时尚，与我们的虚拟助手一起购物。",
+    "browseProducts": "浏览产品",
+    "tryVirtualAssistant": "试用虚拟助手"
+  },
+  "footer": {
+    "about": "关于我们",
+    "contact": "联系我们",
+    "privacy": "隐私政策",
+    "terms": "服务条款",
+    "rights": "版权所有",
+    "newsletter": {
+      "title": "订阅我们的通讯",
+      "description": "每周发送最新的新闻、文章和资源到您的收件箱。",
+      "emailPlaceholder": "输入您的电子邮件",
+      "subscribe": "订阅",
+      "success": "感谢您的订阅！",
+      "error": "订阅失败，请重试。"
+    },
+    "social": {
+      "followUs": "关注我们",
+      "facebook": "脸书",
+      "twitter": "推特",
+      "instagram": "照片墙",
+      "youtube": "优兔"
+    }
+  },
+  "product": {
+    "title": "标题",
+    "price": "价格",
+    "description": "描述",
+    "addToCart": "加入购物车",
+    "outOfStock": "缺货",
+    "inStock": "有货",
+    "quantity": "数量",
+    "relatedProducts": "相关产品"
+  },
+  "cart": {
+    "title": "购物车",
+    "empty": "您的购物车是空的",
+    "subtotal": "小计",
+    "shipping": "运费",
+    "tax": "税费",
+    "total": "总计",
+    "checkout": "去结算",
+    "continueShopping": "继续购物",
+    "remove": "移除"
+  },
+  "checkout": {
+    "title": "结账",
+    "shippingAddress": "收货地址",
+    "billingAddress": "账单地址",
+    "paymentMethod": "支付方式",
+    "orderSummary": "订单摘要",
+    "placeOrder": "提交订单",
+    "sameAsShipping": "与收货地址相同"
+  },
+  "search": {
+    "placeholder": "搜索产品...",
+    "noResults": "未找到产品",
+    "error": "搜索产品时出错"
+  },
+  "validation": {
+    "required": "此字段为必填项",
+    "email": "请输入有效的电子邮件地址",
+    "minLength": "至少需要{{count}}个字符",
+    "maxLength": "不能超过{{count}}个字符",
+    "passwordMismatch": "密码不匹配",
+    "invalidEmail": "请输入有效的电子邮件地址",
+    "invalidPhone": "请输入有效的电话号码",
+    "invalidUrl": "请输入有效的网址"
+  },
+  "error": {
+    "pageNotFound": "页面未找到",
+    "goToHome": "返回首页",
+    "somethingWentWrong": "出错了，请稍后重试。",
+    "networkError": "网络错误，请检查您的连接后重试。",
+    "pageLoadError": "加载此页面时出错。"
+  }
+}

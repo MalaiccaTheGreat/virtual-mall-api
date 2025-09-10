@@ -1,0 +1,124 @@
+{
+  "a11y": {
+    "skipToContent": "Saltar al contenido principal",
+    "searchProducts": "Buscar productos"
+  },
+  "common": {
+    "loading": "Cargando...",
+    "error": "Ocurrió un error",
+    "retry": "Reintentar",
+    "cancel": "Cancelar",
+    "save": "Guardar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "back": "Atrás",
+    "next": "Siguiente",
+    "previous": "Anterior",
+    "submit": "Enviar",
+    "search": "Buscar..."
+  },
+  "header": {
+    "title": "Pulse & Threads",
+    "home": "Inicio",
+    "products": "Productos",
+    "categories": "Categorías",
+    "sale": "Ofertas",
+    "cart": "Carrito",
+    "account": "Cuenta",
+    "login": "Iniciar sesión",
+    "logout": "Cerrar sesión",
+    "language": "Idioma",
+    "changeLanguage": "Cambiar idioma",
+    "logoAlt": "Logo de Pulse & Threads",
+    "addTranslation": "Añadir traducción",
+    "theme": "Tema"
+  },
+  "theme": {
+    "light": "Claro",
+    "dark": "Oscuro",
+    "system": "Sistema",
+    "toggleToLight": "Cambiar a modo claro",
+    "toggleToDark": "Cambiar a modo oscuro",
+    "toggleToSystem": "Usar preferencia del sistema"
+  },
+  "home": {
+    "welcome": "Bienvenido a {name}",
+    "tagline": "Descubre moda increíble y compra con nuestro asistente virtual.",
+    "browseProducts": "Ver productos",
+    "tryVirtualAssistant": "Probar asistente virtual"
+  },
+  "footer": {
+    "about": "Sobre nosotros",
+    "contact": "Contacto",
+    "privacy": "Política de privacidad",
+    "terms": "Términos de servicio",
+    "rights": "Todos los derechos reservados",
+    "newsletter": {
+      "title": "Suscríbete a nuestro boletín",
+      "description": "Las últimas noticias, artículos y recursos, enviados a tu bandeja de entrada semanalmente.",
+      "emailPlaceholder": "Ingresa tu correo electrónico",
+      "subscribe": "Suscribirse",
+      "success": "¡Gracias por suscribirte!",
+      "error": "Error al suscribirse. Por favor, inténtalo de nuevo."
+    },
+    "social": {
+      "followUs": "Síguenos",
+      "facebook": "Facebook",
+      "twitter": "Twitter",
+      "instagram": "Instagram",
+      "youtube": "YouTube"
+    }
+  },
+  "product": {
+    "title": "Título",
+    "price": "Precio",
+    "description": "Descripción",
+    "addToCart": "Añadir al carrito",
+    "outOfStock": "Agotado",
+    "inStock": "En stock",
+    "quantity": "Cantidad",
+    "relatedProducts": "Productos relacionados"
+  },
+  "cart": {
+    "title": "Carrito de compras",
+    "empty": "Tu carrito está vacío",
+    "subtotal": "Subtotal",
+    "shipping": "Envío",
+    "tax": "Impuestos",
+    "total": "Total",
+    "checkout": "Proceder al pago",
+    "continueShopping": "Seguir comprando",
+    "remove": "Eliminar"
+  },
+  "checkout": {
+    "title": "Pago",
+    "shippingAddress": "Dirección de envío",
+    "billingAddress": "Dirección de facturación",
+    "paymentMethod": "Método de pago",
+    "orderSummary": "Resumen del pedido",
+    "placeOrder": "Realizar pedido",
+    "sameAsShipping": "Igual que la dirección de envío"
+  },
+  "search": {
+    "placeholder": "Buscar productos...",
+    "noResults": "No se encontraron productos",
+    "error": "Error al buscar productos"
+  },
+  "validation": {
+    "required": "Este campo es obligatorio",
+    "email": "Por favor ingresa un correo electrónico válido",
+    "minLength": "Debe tener al menos {{count}} caracteres",
+    "maxLength": "No debe exceder los {{count}} caracteres",
+    "passwordMismatch": "Las contraseñas no coinciden",
+    "invalidEmail": "Por favor ingresa un correo electrónico válido",
+    "invalidPhone": "Por favor ingresa un número de teléfono válido",
+    "invalidUrl": "Por favor ingresa una URL válida"
+  },
+  "error": {
+    "pageNotFound": "Página no encontrada",
+    "goToHome": "Ir al inicio",
+    "somethingWentWrong": "Algo salió mal. Por favor, inténtalo de nuevo más tarde.",
+    "networkError": "Error de red. Por favor verifica tu conexión e inténtalo de nuevo.",
+    "pageLoadError": "Ocurrió un error al cargar esta página."
+  }
+}

@@ -1,0 +1,124 @@
+{
+  "a11y": {
+    "skipToContent": "Skip to main content",
+    "searchProducts": "Search products"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "retry": "Retry",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "submit": "Submit",
+    "search": "Search..."
+  },
+  "header": {
+    "title": "Pulse & Threads",
+    "home": "Home",
+    "products": "Products",
+    "categories": "Categories",
+    "sale": "Sale",
+    "cart": "Cart",
+    "account": "Account",
+    "login": "Login",
+    "logout": "Logout",
+    "language": "Language",
+    "changeLanguage": "Change language",
+    "logoAlt": "Pulse & Threads Logo",
+    "addTranslation": "Add translation",
+    "theme": "Theme"
+  },
+  "theme": {
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System",
+    "toggleToLight": "Switch to light mode",
+    "toggleToDark": "Switch to dark mode",
+    "toggleToSystem": "Use system preference"
+  },
+  "home": {
+    "welcome": "Welcome to {name}",
+    "tagline": "Discover amazing fashion and shop with our virtual assistant.",
+    "browseProducts": "Browse Products",
+    "tryVirtualAssistant": "Try Virtual Assistant"
+  },
+  "footer": {
+    "about": "About Us",
+    "contact": "Contact",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service",
+    "rights": "All rights reserved",
+    "newsletter": {
+      "title": "Subscribe to our newsletter",
+      "description": "The latest news, articles, and resources, sent to your inbox weekly.",
+      "emailPlaceholder": "Enter your email",
+      "subscribe": "Subscribe",
+      "success": "Thank you for subscribing!",
+      "error": "Failed to subscribe. Please try again."
+    },
+    "social": {
+      "followUs": "Follow us",
+      "facebook": "Facebook",
+      "twitter": "Twitter",
+      "instagram": "Instagram",
+      "youtube": "YouTube"
+    }
+  },
+  "product": {
+    "title": "Title",
+    "price": "Price",
+    "description": "Description",
+    "addToCart": "Add to Cart",
+    "outOfStock": "Out of Stock",
+    "inStock": "In Stock",
+    "quantity": "Quantity",
+    "relatedProducts": "Related Products"
+  },
+  "cart": {
+    "title": "Shopping Cart",
+    "empty": "Your cart is empty",
+    "subtotal": "Subtotal",
+    "shipping": "Shipping",
+    "tax": "Tax",
+    "total": "Total",
+    "checkout": "Proceed to Checkout",
+    "continueShopping": "Continue Shopping",
+    "remove": "Remove"
+  },
+  "checkout": {
+    "title": "Checkout",
+    "shippingAddress": "Shipping Address",
+    "billingAddress": "Billing Address",
+    "paymentMethod": "Payment Method",
+    "orderSummary": "Order Summary",
+    "placeOrder": "Place Order",
+    "sameAsShipping": "Same as shipping address"
+  },
+  "search": {
+    "placeholder": "Search products...",
+    "noResults": "No products found",
+    "error": "Error searching products"
+  },
+  "validation": {
+    "required": "This field is required",
+    "email": "Please enter a valid email address",
+    "minLength": "Must be at least {{count}} characters",
+    "maxLength": "Must be at most {{count}} characters",
+    "passwordMismatch": "Passwords do not match",
+    "invalidEmail": "Please enter a valid email address",
+    "invalidPhone": "Please enter a valid phone number",
+    "invalidUrl": "Please enter a valid URL"
+  },
+  "error": {
+    "pageNotFound": "Page Not Found",
+    "goToHome": "Go to Home",
+    "somethingWentWrong": "Something went wrong. Please try again later.",
+    "networkError": "Network error. Please check your connection and try again.",
+    "pageLoadError": "An error occurred while loading this page."
+  }
+}

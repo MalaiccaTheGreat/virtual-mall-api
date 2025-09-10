@@ -13,11 +13,25 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        // Clear existing data
+        \DB::statement('SET FOREIGN_KEY_CHECKS=0');
+        
+        // Clear existing users
+        \App\Models\User::truncate();
+        \App\Models\Storefront::truncate();
+        
+        // Reset auto-increment counters
+        \DB::statement('ALTER TABLE users AUTO_INCREMENT = 1');
+        \DB::statement('ALTER TABLE storefronts AUTO_INCREMENT = 1');
+        
+        // Enable foreign key checks
+        \DB::statement('SET FOREIGN_KEY_CHECKS=1');
+        
+        // Create admin, store owner users, and products
+        $this->call([
+            AdminUserSeeder::class,
+            ProductSeeder::class,
+            // Add other seeders here as needed
         ]);
     }
 }

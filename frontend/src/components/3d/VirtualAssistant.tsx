@@ -1,26 +1,11 @@
-import { useRef, useState, Suspense, useEffect, useCallback } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
-import { useGLTF, OrbitControls, PerspectiveCamera } from '@react-three/drei';
-import { motion, AnimatePresence } from 'framer-motion';
-import * as THREE from 'three';
-import { GLTF } from 'three-stdlib';
-import axios from 'axios';
-
-declare module 'three-stdlib' {
-  export interface GLTF {
-    nodes: { [key: string]: THREE.Mesh };
-    materials: { [key: string]: THREE.Material & { color?: THREE.Color } };
-  }
-}
-
-type Message = {
-  id: string;
-  text: string;
-  sender: 'user' | 'assistant';
-  timestamp: Date;
-};
-
-type Expression = 'happy' | 'sad' | 'surprised' | 'angry' | 'thinking' | 'neutral';
+import { useState, useEffect, useRef } from 'react';
+import { Canvas } from '@react-three/fiber';
+import { AssistantModel } from './AssistantModel';
+import { ChatInterface, Message } from '../chat/ChatInterface';
+import { useTheme } from '../../contexts/ThemeContext';
+import { useAuth } from '../../contexts/AuthContext';
+import { useCart } from '../../contexts/CartContext';
+import { useResponsive } from '../../hooks/useResponsive';
 
 interface VirtualAssistantProps {
   onSpeak?: (text: string) => void;
@@ -28,15 +13,94 @@ interface VirtualAssistantProps {
   className?: string;
 }
 
-// Expression color mapping
-const EXPRESSION_COLORS: Record<Expression, string> = {
-  happy: '#ffcc00',
-  sad: '#3399ff',
-  surprised: '#ff3366',
-  angry: '#ff3300',
-  thinking: '#9c27b0',
-  neutral: '#ffffff'
-};
+interface BlendShapes {
+  eyeBlink_L?: number;
+  eyeBlink_R?: number;
+  eyeSquint_L?: number;
+  eyeSquint_R?: number;
+  browDown_L?: number;
+  browDown_R?: number;
+  browInnerUp?: number;
+  mouthSmile_L?: number;
+  mouthSmile_R?: number;
+  mouthFrown_L?: number;
+  mouthFrown_R?: number;
+  mouthOpen?: number;
+  mouthPucker?: number;
+}
+
+interface VirtualAssistantProps {
+  onSpeak?: (text: string) => void;
+  onExpressionChange?: (expression: Expression) => void;
+  className?: string;
+}
+
+// Expression configurations with blend shapes and colors
+const EXPRESSION_CONFIG = {
+  happy: {
+    blendShapes: {
+      mouthSmile_L: 1,
+      mouthSmile_R: 1,
+      eyeSquint_L: 0.5,
+      eyeSquint_R: 0.5,
+    },
+    color: '#ffcc00'
+  },
+  sad: {
+    blendShapes: {
+      mouthFrown_L: 1,
+      mouthFrown_R: 1,
+      browDown_L: 0.8,
+      browDown_R: 0.8,
+    },
+    color: '#3399ff'
+  },
+  surprised: {
+    blendShapes: {
+      mouthOpen: 0.7,
+      browInnerUp: 1,
+      eyeWide_L: 0.9,
+      eyeWide_R: 0.9
+    },
+    color: '#ff3366'
+  },
+  angry: {
+    blendShapes: {
+      browDown_L: 1,
+      browDown_R: 1,
+      mouthFrown_L: 0.8,
+      mouthFrown_R: 0.8
+    },
+    color: '#ff3300'
+  },
+  thinking: {
+    blendShapes: {
+      browDown_L: 0.6,
+      browDown_R: 0.6,
+      mouthPucker: 0.7,
+    },
+    color: '#9c27b0'
+  },
+  listening: {
+    blendShapes: {
+      mouthOpen: 0.3,
+      browInnerUp: 0.5,
+    },
+    color: '#4caf50'
+  },
+  talking: {
+    blendShapes: {
+      mouthOpen: 0.5,
+      mouthSmile_L: 0.4,
+      mouthSmile_R: 0.4
+    },
+    color: '#2196f3'
+  },
+  neutral: {
+    blendShapes: {},
+    color: '#ffffff'
+  }
+} as const;
 
 // Default suggestions for the chat
 const SUGGESTIONS = [
@@ -46,279 +110,375 @@ const SUGGESTIONS = [
   "Show me summer collection"
 ];
 
-function Model({ 
-  expression = 'neutral', 
-  isSpeaking = false 
-}: { 
-  expression: Expression; 
-  isSpeaking: boolean 
-}) {
+interface ModelProps {
+  expression?: Expression;
+  isSpeaking?: boolean;
+  position?: [number, number, number];
+  scale?: number;
+}
+
+const Model: React.FC<ModelProps> = ({ 
+  expression = 'neutral',
+  isSpeaking = false,
+  position = [0, 0, 0],
+  scale = 1
+}) => {
   const group = useRef<THREE.Group>(null);
   const [currentExpression, setCurrentExpression] = useState(expression);
-  const [speakIntensity, setSpeakIntensity] = useState(0);
   
-  const { nodes, materials } = useGLTF('/models/avatar.glb') as GLTF;
+  // Load the 3D model
+  const { nodes, materials } = useGLTF('/models/assistant.glb') as unknown as {
+    nodes: Record<string, THREE.Mesh>;
+    materials: Record<string, THREE.Material>;
+  };
 
   // Handle expression changes with smooth transition
   useEffect(() => {
     const timer = setTimeout(() => {
       setCurrentExpression(expression);
-    }, 300); // Small delay for smoother transition
+    }, 100);
     return () => clearTimeout(timer);
   }, [expression]);
+  
+  // Handle speaking animation
+  useEffect(() => {
+    if (!group.current) return;
+    
+    if (isSpeaking) {
+      // Add subtle animation when speaking
+      const interval = setInterval(() => {
+        if (group.current) {
+          group.current.rotation.y += 0.01;
+        }
+      }, 50);
+      
+      return () => clearInterval(interval);
+    }
+  }, [isSpeaking]);
 
   // Speaking animation
   useFrame(({ clock }) => {
     if (!group.current) return;
     
     // Floating animation
-    group.current.position.y = Math.sin(clock.elapsedTime) * 0.1;
-    
-    // Speaking animation
-    if (isSpeaking) {
-      const intensity = Math.sin(clock.elapsedTime * 5) * 0.1 + 1;
-      setSpeakIntensity(intensity);
-      group.current.scale.set(intensity, intensity, intensity);
-    } else {
-      // Smoothly return to normal scale when not speaking
-      setSpeakIntensity(prev => prev * 0.9 + 0.1); // Smoothly approach 1
-      group.current.scale.lerp(new THREE.Vector3(1, 1, 1), 0.1);
-    }
-  });
-
-  // Apply expression colors to materials
-  useEffect(() => {
-    if (!materials) return;
-    
-    // Find and update the main material (adjust 'body' based on your model's material name)
-    const material = Object.values(materials).find(m => 'color' in m) || 
-                    Object.values(materials)[0];
-    
-    if (material && 'color' in material) {
-      if (material.color instanceof THREE.Color) {
-        material.color.set(EXPRESSION_COLORS[currentExpression]);
-      } else if (material.color) {
-        material.color = new THREE.Color(EXPRESSION_COLORS[currentExpression]);
-      }
-    }
-  }, [currentExpression, materials]);
-
-  return (
-    <group ref={group} dispose={null}>
-      <primitive object={nodes.Scene} />
-    </group>
-  );
-}
-
-export function VirtualAssistant({ 
-  onSpeak, 
-  onExpressionChange, 
-  className = '' 
-}: VirtualAssistantProps) {
-  const [messages, setMessages] = useState<Message[]>([]);
-  const [inputValue, setInputValue] = useState('');
-  const [isTyping, setIsTyping] = useState(false);
-  const [isMinimized, setIsMinimized] = useState(false);
+}) => {
+  // State management
   const [expression, setExpression] = useState<Expression>('neutral');
-  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const [isMinimized, setIsMinimized] = useState(false);
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [isProcessing, setIsProcessing] = useState(false);
+  
+  // Hooks
+  const { theme } = useTheme();
+  const { user } = useAuth();
+  const { cart } = useCart();
+  const { isMobile } = useResponsive();
+  const recognitionRef = useRef<SpeechRecognition | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Handle expression changes
+  // Initialize with a greeting
+  useEffect(() => {
+    const greeting = `Hello${user ? `, ${user.name}` : ''}! How can I help you today?`;
+    setMessages([{
+      id: 'greeting',
+      text: greeting,
+      sender: 'assistant',
+      timestamp: new Date()
+    }]);
+  }, [user]);
+
+  // Initialize speech recognition
+  useEffect(() => {
+    if (typeof window !== 'undefined' && ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)) {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      recognitionRef.current = new SpeechRecognition();
+      recognitionRef.current.continuous = false;
+      recognitionRef.current.interimResults = false;
+      recognitionRef.current.lang = 'en-US';
+      
+      recognitionRef.current.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        handleSendMessage(transcript);
+      };
+      
+      recognitionRef.current.onerror = (event) => {
+        console.error('Speech recognition error', event.error);
+        setExpression('sad');
+        setTimeout(() => setExpression('neutral'), 2000);
+      };
+    }
+    
+    return () => {
+      if (recognitionRef.current) {
+        recognitionRef.current.stop();
+      }
+    };
+  }, []);
+
+  // Toggle voice input
+  const toggleListening = () => {
+    if (recognitionRef.current) {
+      if (expression === 'listening') {
+        recognitionRef.current.stop();
+        setExpression('neutral');
+      } else {
+        try {
+          recognitionRef.current.start();
+          setExpression('listening');
+        } catch (error) {
+          console.error('Error starting speech recognition:', error);
+          setExpression('sad');
+          setTimeout(() => setExpression('neutral'), 2000);
+        }
+      }
+    }
+  };
+
+  // Send message to backend
+  const handleSendMessage = async (message: string) => {
+    if (!message.trim()) return;
+    
+    // Add user message to chat
+    const userMessage: Message = {
+      id: Date.now().toString(),
+      text: message,
+      sender: 'user',
+      timestamp: new Date()
+    };
+    
+    setMessages(prev => [...prev, userMessage]);
+    setExpression('thinking');
+    setIsProcessing(true);
+    
+    try {
+      // Call backend API
+      const response = await fetch('/api/assistant/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${await user?.getIdToken()}`
+        },
+        body: JSON.stringify({
+          message,
+          context: {
+            userId: user?.uid,
+            cartItems: cart.items,
+            previousMessages: messages.slice(-5),
+            timestamp: new Date().toISOString()
+          }
+        })
+      });
+      
+      if (!response.ok) throw new Error('Failed to get response from assistant');
+      
+      const data = await response.json();
+      
+      // Add assistant response to chat
+      const assistantMessage: Message = {
+        id: `assistant-${Date.now()}`,
+        text: data.response,
+        sender: 'assistant',
+        timestamp: new Date()
+      };
+      
+      setMessages(prev => [...prev, assistantMessage]);
+      
+      // Speak the response if TTS is enabled
+      if (onSpeak && data.shouldSpeak !== false) {
+        onSpeak(data.response);
+        setExpression('talking');
+        setTimeout(() => setExpression('neutral'), data.response.length * 50);
+      } else {
+        setExpression('neutral');
+      }
+      
+    } catch (error) {
+      console.error('Error sending message:', error);
+      
+      const errorMessage: Message = {
+        id: `error-${Date.now()}`,
+        text: 'Sorry, I encountered an error. Please try again.',
+        sender: 'assistant',
+        timestamp: new Date()
+      };
+      
+      setMessages(prev => [...prev, errorMessage]);
+      setExpression('sad');
+      setTimeout(() => setExpression('neutral'), 2000);
+      
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
+  // Toggle chat window
+  const toggleMinimize = () => {
+    setIsMinimized(!isMinimized);
+  };
+
+  // Effect to notify when assistant is speaking
   useEffect(() => {
     if (onExpressionChange) {
       onExpressionChange(expression);
     }
   }, [expression, onExpressionChange]);
 
-  // Auto-scroll to bottom of messages
+  // Handle keyboard shortcuts
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
-
-  // Set initial greeting
-  useEffect(() => {
-    if (messages.length === 0) {
-      setMessages([{
-        id: '1',
-        text: "Hello! I'm your virtual shopping assistant. How can I help you today?",
-        sender: 'assistant',
-        timestamp: new Date()
-      }]);
-    }
-  }, []);
-
-  const handleSendMessage = useCallback(async () => {
-    if (!inputValue.trim()) return;
-
-    // Add user message
-    const userMessage: Message = {
-      id: Date.now().toString(),
-      text: inputValue,
-      sender: 'user',
-      timestamp: new Date()
-    };
-
-    setMessages(prev => [...prev, userMessage]);
-    setInputValue('');
-    setIsTyping(true);
-    setExpression('thinking');
-
-    try {
-      // Call the backend API
-      const response = await axios.post('/api/chat', {
-        message: inputValue
-      });
-
-      // Add assistant's response
-      const assistantMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        text: response.data.response,
-        sender: 'assistant',
-        timestamp: new Date()
-      };
-
-      setMessages(prev => [...prev, assistantMessage]);
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Toggle chat with Ctrl+Space
+      if (e.ctrlKey && e.code === 'Space') {
+        e.preventDefault();
+        setIsMinimized(prev => !prev);
+      }
       
-      // Update expression based on response
-      if (response.data.expression) {
-        setExpression(response.data.expression);
-      } else {
-        setExpression('neutral');
+      // Focus input when chat is open and '/' is pressed
+      if (e.key === '/' && !isMinimized) {
+        e.preventDefault();
+        inputRef.current?.focus();
       }
+    };
+    
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isMinimized]);
 
-      // Speak the response if onSpeak is provided
-      if (onSpeak) {
-        onSpeak(assistantMessage.text);
-      }
-    } catch (error) {
-      console.error('Error sending message:', error);
-      setMessages(prev => [...prev, {
-        id: (Date.now() + 1).toString(),
-        text: "Sorry, I'm having trouble connecting to the server. Please try again later.",
-        sender: 'assistant',
-        timestamp: new Date()
-      }]);
-      setExpression('sad');
-    } finally {
-      setIsTyping(false);
-    }
-  }, [inputValue, onSpeak]);
-
-  const handleSuggestionClick = (suggestion: string) => {
-    setInputValue(suggestion);
-    if (inputRef.current) {
-      inputRef.current.focus();
-    }
-  };
+  // Responsive adjustments
+  const chatWidth = isMobile ? '90vw' : '400px';
+  const chatHeight = isMobile ? '60vh' : '600px';
 
   return (
-    <div className={`relative w-full h-full flex flex-col ${className}`}>
-      {/* 3D Model */}
-      <div className={`flex-1 relative transition-all duration-300 ${isMinimized ? 'h-0' : 'h-2/3'}`}>
-        <Canvas shadows>
-          <Suspense fallback={null}>
-            <PerspectiveCamera makeDefault position={[0, 0, 5]} />
-            <ambientLight intensity={0.5} />
-            <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
-            <Model expression={expression} isSpeaking={isTyping} />
-            <OrbitControls enableZoom={false} />
-          </Suspense>
-        </Canvas>
-        
-        {/* Minimize/Maximize button */}
-        <button 
-          onClick={() => setIsMinimized(!isMinimized)}
-          className="absolute top-2 right-2 bg-white/80 hover:bg-white text-gray-800 rounded-full p-2 shadow-md z-10"
-          aria-label={isMinimized ? 'Maximize' : 'Minimize'}
-        >
-          {isMinimized ? '🔍' : '➖'}
-        </button>
-      </div>
-
-      {/* Chat Interface */}
-      <div className={`bg-white rounded-t-2xl shadow-xl overflow-hidden transition-all duration-300 ${isMinimized ? 'h-full' : 'h-1/3'}`}>
-        {/* Chat Header */}
-        <div className="bg-indigo-600 text-white p-4 flex justify-between items-center">
-          <h3 className="font-semibold">Virtual Assistant</h3>
+    <div 
+      className={`fixed bottom-4 right-4 z-50 transition-all duration-300 ease-in-out ${className}`}
+      style={{
+        width: isMinimized ? '80px' : chatWidth,
+        height: isMinimized ? '80px' : chatHeight,
+        maxWidth: '100vw',
+        maxHeight: '90vh',
+        borderRadius: '12px',
+        overflow: 'hidden',
+        boxShadow: '0 10px 25px rgba(0, 0, 0, 0.2)',
+        display: 'flex',
+        flexDirection: 'column',
+        backgroundColor: theme === 'dark' ? '#1f2937' : 'white',
+        color: theme === 'dark' ? 'white' : '#1f2937'
+      }}
+      role="dialog"
+      aria-label="Virtual Assistant"
+      aria-expanded={!isMinimized}
+    >
+      {/* Header */}
+      <div 
+        className="flex items-center justify-between p-4 cursor-pointer select-none"
+        onClick={toggleMinimize}
+        style={{
+          backgroundColor: theme === 'dark' ? '#111827' : '#f3f4f6',
+          borderBottom: `1px solid ${theme === 'dark' ? '#374151' : '#e5e7eb'}`
+        }}
+      >
+        <div className="flex items-center">
+          <div 
+            className="w-8 h-8 rounded-full flex items-center justify-center mr-3"
+            style={{
+              backgroundColor: expression === 'talking' ? '#3b82f6' : 
+                              expression === 'thinking' ? '#f59e0b' :
+                              expression === 'listening' ? '#8b5cf6' :
+                              '#6b7280'
+            }}
+          >
+            <span className="text-white text-sm">
+              {expression === 'talking' ? '🗣️' :
+               expression === 'thinking' ? '🤔' :
+               expression === 'listening' ? '👂' : '🤖'}
+            </span>
+          </div>
+          {!isMinimized && <h3 className="font-medium">Virtual Assistant</h3>}
         </div>
-
-        {/* Messages */}
-        <div className="h-[calc(100%-120px)] overflow-y-auto p-4 space-y-4">
-          <AnimatePresence>
-            {messages.map((message) => (
-              <motion.div
-                key={message.id}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
-              >
-                <div 
-                  className={`max-w-[80%] rounded-lg p-3 ${
-                    message.sender === 'user' 
-                      ? 'bg-indigo-600 text-white rounded-br-none' 
-                      : 'bg-gray-100 text-gray-800 rounded-bl-none'
-                  }`}
-                >
-                  <p className="text-sm">{message.text}</p>
-                  <p className="text-xs opacity-50 mt-1 text-right">
-                    {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                  </p>
-                </div>
-              </motion.div>
-            ))}
-            {isTyping && (
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="flex items-center space-x-1 p-2"
-              >
-                <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
-              </motion.div>
-            )}
-            <div ref={messagesEndRef} />
-          </AnimatePresence>
-        </div>
-
-        {/* Input Area */}
-        <div className="border-t p-3 bg-gray-50">
-          {messages.length === 1 && (
-            <div className="flex flex-wrap gap-2 mb-3">
-              {SUGGESTIONS.map((suggestion, index) => (
-                <button
-                  key={index}
-                  onClick={() => handleSuggestionClick(suggestion)}
-                  className="text-xs bg-white hover:bg-gray-100 border rounded-full px-3 py-1 text-gray-700 transition-colors"
-                >
-                  {suggestion}
-                </button>
-              ))}
-            </div>
-          )}
-          <div className="flex space-x-2">
-            <input
-              ref={inputRef}
-              type="text"
-              value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
-              onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
-              placeholder="Type your message..."
-              className="flex-1 border rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              disabled={isTyping}
-            />
-            <button
-              onClick={handleSendMessage}
-              disabled={!inputValue.trim() || isTyping}
-              className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-full p-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+        {!isMinimized && (
+          <div className="flex items-center space-x-2">
+            <button 
+              className="p-1 rounded-full hover:bg-opacity-20 hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              onClick={(e) => {
+                e.stopPropagation();
+                toggleListening();
+              }}
+              aria-label={expression === 'listening' ? 'Stop listening' : 'Start voice input'}
+              style={{
+                color: expression === 'listening' ? '#ef4444' : (theme === 'dark' ? '#9ca3af' : '#4b5563')
+              }}
             >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13a1 1 0 102 0V9.414l1.293 1.293a1 1 0 001.414-1.414z" clipRule="evenodd" />
-              </svg>
+              {expression === 'listening' ? (
+                <span className="relative flex h-3 w-3">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
+                </span>
+              ) : (
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+                </svg>
+              )}
+            </button>
+            <button 
+              className="p-1 rounded-full hover:bg-opacity-20 hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              onClick={(e) => {
+                e.stopPropagation();
+                toggleMinimize();
+              }}
+              aria-label={isMinimized ? 'Maximize chat' : 'Minimize chat'}
+            >
+              {isMinimized ? (
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+                </svg>
+              ) : (
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              )}
             </button>
           </div>
-        </div>
+        )}
       </div>
+      
+      {/* 3D Model View (Minimized) */}
+      {isMinimized ? (
+        <div className="flex-1 flex items-center justify-center bg-gray-100 dark:bg-gray-800">
+          <div className="w-16 h-16">
+            <Canvas>
+              <ambientLight intensity={0.5} />
+              <pointLight position={[10, 10, 10]} />
+              <AssistantModel 
+                expression={expression} 
+                isSpeaking={expression === 'talking'}
+                scale={0.4}
+                position={[0, -0.5, 0]}
+              />
+            </Canvas>
+          </div>
+        </div>
+      ) : (
+        <>
+          <ChatInterface 
+            messages={messages}
+            onSendMessage={handleSendMessage}
+            isProcessing={isProcessing}
+          />
+          
+          {/* 3D Model (Maximized) */}
+          <div className="absolute bottom-24 right-4 w-24 h-24 md:w-32 md:h-32 z-10">
+            <Canvas>
+              <ambientLight intensity={0.5} />
+              <pointLight position={[10, 10, 10]} />
+              <AssistantModel 
+                expression={expression} 
+                isSpeaking={expression === 'talking'}
+                scale={0.25}
+                position={[0, -0.5, 0]}
+              />
+            </Canvas>
+          </div>
+        </>
+      )}
     </div>
   );
-}
+};

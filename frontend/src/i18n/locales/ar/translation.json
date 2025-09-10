@@ -1,0 +1,106 @@
+{
+  "a11y": {
+    "skipToContent": "تخطي إلى المحتوى",
+    "searchProducts": "بحث المنتجات"
+  },
+  "common": {
+    "loading": "جاري التحميل...",
+    "error": "حدث خطأ",
+    "retry": "إعادة المحاولة",
+    "cancel": "إلغاء",
+    "save": "حفظ",
+    "delete": "حذف",
+    "edit": "تعديل",
+    "back": "عودة",
+    "next": "التالي",
+    "previous": "السابق",
+    "submit": "إرسال",
+    "search": "بحث..."
+  },
+  "header": {
+    "title": "نبض وخيوط",
+    "home": "الرئيسية",
+    "products": "المنتجات",
+    "categories": "الفئات",
+    "sale": "تخفيضات",
+    "cart": "السلة",
+    "account": "الحساب",
+    "login": "تسجيل الدخول",
+    "logout": "تسجيل الخروج",
+    "language": "اللغة",
+    "changeLanguage": "تغيير اللغة",
+    "logoAlt": "شعار نبض وخيوط",
+    "addTranslation": "إضافة ترجمة",
+    "theme": "السمة"
+  },
+  "theme": {
+    "light": "فاتح",
+    "dark": "داكن",
+    "system": "النظام",
+    "toggleToLight": "التبديل إلى الوضع الفاتح",
+    "toggleToDark": "التبديل إلى الوضع الداكن",
+    "toggleToSystem": "استخدام إعدادات النظام"
+  },
+  "home": {
+    "welcome": "مرحباً بك في {name}",
+    "tagline": "اكتشف الموضة المذهلة وتسوق مع مساعدنا الافتراضي.",
+    "browseProducts": "تصفح المنتجات",
+    "tryVirtualAssistant": "جرب المساعد الافتراضي"
+  },
+  "footer": {
+    "about": "من نحن",
+    "contact": "اتصل بنا",
+    "privacy": "الخصوصية",
+    "terms": "الشروط",
+    "rights": "جميع الحقوق محفوظة"
+  },
+  "product": {
+    "title": "العنوان",
+    "price": "السعر",
+    "description": "الوصف",
+    "addToCart": "أضف للسلة",
+    "outOfStock": "غير متوفر",
+    "inStock": "متوفر",
+    "quantity": "الكمية",
+    "relatedProducts": "منتجات ذات صلة"
+  },
+  "cart": {
+    "title": "سلة التسوق",
+    "empty": "سلة التسوق فارغة",
+    "subtotal": "المجموع",
+    "shipping": "الشحن",
+    "tax": "الضريبة",
+    "total": "الإجمالي",
+    "checkout": "إتمام الشراء",
+    "continueShopping": "متابعة التسوق",
+    "remove": "حذف"
+  },
+  "checkout": {
+    "title": "الدفع",
+    "shippingAddress": "عنوان الشحن",
+    "billingAddress": "عنوان الفاتورة",
+    "paymentMethod": "طريقة الدفع",
+    "orderSummary": "ملخص الطلب",
+    "placeOrder": "تأكيد الطلب",
+    "sameAsShipping": "نفس عنوان الشحن"
+  },
+  "search": {
+    "placeholder": "ابحث عن منتجات...",
+    "noResults": "لا توجد نتائج",
+    "error": "خطأ في البحث"
+  },
+  "validation": {
+    "required": "هذا الحقل مطلوب",
+    "email": "البريد الإلكتروني غير صالح",
+    "minLength": "يجب أن يكون {{count}} أحرف على الأقل",
+    "maxLength": "يجب ألا يتجاوز {{count}} حرفًا",
+    "passwordMismatch": "كلمة المرور غير متطابقة"
+  },
+  "error": {
+    "pageNotFound": "الصفحة غير موجودة",
+    "goToHome": "العودة للرئيسية",
+    "somethingWentWrong": "حدث خطأ ما. يرجى المحاولة لاحقًا.",
+    "networkError": "خطأ في الشبكة. يرجى التحقق من الاتصال والمحاولة مرة أخرى.",
+    "pageLoadError": "حدث خطأ أثناء تحميل هذه الصفحة."
+  }
+}

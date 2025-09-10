@@ -9,8 +9,24 @@ export default defineConfig({
       // Use React 17+ automatic JSX transform
       jsxRuntime: 'automatic',
       // Removed Babel decorator plugin to resolve build issues
+      babel: {
+        presets: ['@babel/preset-react', '@babel/preset-env'],
+        plugins: []
+      }
     })
   ],
+  optimizeDeps: {
+    esbuildOptions: {
+      loader: {
+        '.js': 'jsx',
+      },
+      // Node.js global to browser globalThis
+      define: {
+        global: 'globalThis',
+      },
+    },
+    exclude: ['expo', 'expo-gl', 'expo-camera'],
+  },
   server: {
     host: '0.0.0.0',
     port: 3000,
