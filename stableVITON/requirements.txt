@@ -1,0 +1,28 @@
+<<<<<<< HEAD
+torch==2.0.0
+torchvision==0.15.1
+torchaudio==2.0.1
+pytorch-lightning==1.5.0
+einops
+opencv-python==4.7.0.72
+matplotlib
+omegaconf
+albumentations
+transformers==4.33.2
+xformers==0.0.19
+triton==2.0.0
+open-clip-torch==2.19.0
+diffusers==0.20.2
+scipy==1.10.1
+ipython
+=======
+blinker==1.9.0
+click==8.2.1
+colorama==0.4.6
+Flask==2.3.3
+Flask-Cors==4.0.0
+itsdangerous==2.2.0
+Jinja2==3.1.6
+MarkupSafe==3.0.2
+Werkzeug==2.3.7
+>>>>>>> 124cea82 (Initial commit with stableVITON setup)
