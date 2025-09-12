@@ -1,0 +1,13 @@
+
+> virtual-mall-frontend@0.0.0 dev
+> vite --config vite.config.mjs
+
+
+  VITE v7.1.5  ready in 447 ms
+
+  ➜  Local:   http://localhost:3000/
+  ➜  Network: http://192.168.0.2:3000/
+
+  LARAVEL v12.24.0  plugin v2.0.1
+
+  ➜  APP_URL: undefined

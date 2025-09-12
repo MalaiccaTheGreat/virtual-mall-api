@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import { Head, Link } from '@inertiajs/react';
-import Button from '../Components/Button';
+import Button from '../components/Button';
+import Modal from '../components/Modal';
+import VirtualTryOn from '../components/VirtualTryOn';
 
 export default function ProductDetail({ product }) {
   const [quantity, setQuantity] = useState(1);
   const [loading, setLoading] = useState(false);
+  const [showTryOn, setShowTryOn] = useState(false);
 
   const addToCart = () => {
     setLoading(true);
@@ -96,12 +99,21 @@ export default function ProductDetail({ product }) {
                   >
                     {loading ? 'Adding to cart...' : 'Add to Cart'}
                   </Button>
+                  <Button
+                    onClick={() => setShowTryOn(true)}
+                    className="w-full mt-4"
+                  >
+                    Virtual Try-On
+                  </Button>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
+      <Modal show={showTryOn} onClose={() => setShowTryOn(false)}>
+        <VirtualTryOn product={product} />
+      </Modal>
     </React.Fragment>
   );
 }
